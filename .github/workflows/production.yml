@@ -2,15 +2,19 @@ name: Production Build
 
 on:
   push:
-    branches: [production, main]  # Including main as it often deploys to production
+    branches: [production, main]
   pull_request:
     branches: [production]
+  workflow_dispatch:
 
 jobs:
   build-production:
     name: Build Production
     runs-on: ubuntu-latest
     environment: production
+    permissions:
+      contents: read
+      actions: write
 
     steps:
     - uses: actions/checkout@v4
@@ -27,6 +31,9 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+
+    - name: Install Vitest UI
+      run: pnpm add -D @vitest/ui
 
     - name: Build for production
       run: pnpm run build
@@ -48,7 +55,7 @@ jobs:
       run: cp version.txt dist/
 
     - name: Upload production build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: production-build
         path: dist
