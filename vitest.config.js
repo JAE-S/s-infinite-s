@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import path from 'path';
 
+// Date for reports
+const dateStamp = new Date().toISOString().split('T')[0];
+
 // Create results directory if it doesn't exist
 import fs from 'fs';
 const resultsDir = path.resolve('./src/test/results');
@@ -17,16 +20,33 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
     include: ['**/*.{test,spec}.{ts,tsx}'],
-    reporters: ['default', 'html', 'json'],
+    reporters: [
+      'default',
+      'json',
+    ],
     outputFile: {
-      json: './src/test/results/test-results.json',
-      html: './src/test/results/test-results.html'
+      json: `./src/test/results/${dateStamp}-test-results.json`,
     },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      reportsDirectory: './src/test/results/coverage',
-    }
+      reportsDirectory: `./src/test/results/coverage-${dateStamp}`,
+      // Keep coverage history
+      all: true,
+      // Ensure comprehensive coverage reporting
+      branches: 70,
+      functions: 70,
+      lines: 70,
+      statements: 70
+    },
+    // Store test runtime history
+    benchmark: {
+      outputFile: './src/test/results/benchmark.json'
+    },
+    // For snapshot testing
+    snapshotFormat: {
+      printBasicPrototype: false,
+    },
   },
   resolve: {
     alias: {

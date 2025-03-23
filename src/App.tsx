@@ -3,7 +3,10 @@ import './App.css';
 function App() {
   return (
     <>
-      <main className="h-screen max-h-screen grow bg-gray-100 px-20 py-12">
+      <main
+        data-testid="main-container"
+        className="h-screen max-h-screen grow bg-gray-100 px-20 py-12"
+      >
         <section className="h-full">
           <div className="mb-20 text-5xl font-extralight text-black">
             <span>Home Office</span>
