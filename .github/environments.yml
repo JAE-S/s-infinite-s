@@ -1,0 +1,18 @@
+environments:
+  development:
+    description: Development environment
+    # No protection rules, automatic deployments allowed
+
+  staging:
+    description: Staging environment
+    protection_rules:
+      # Enable required reviewers for deployments to staging
+      required_reviewers: true
+
+  production:
+    description: Production environment
+    protection_rules:
+      # Enable required reviewers for production deployments
+      required_reviewers: true
+      # Add wait timer before deployment
+      wait_timer: 30 # minutes

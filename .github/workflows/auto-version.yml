@@ -1,0 +1,100 @@
+name: Automatic Versioning
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - development
+      - staging
+      - production
+      - main
+
+jobs:
+  auto-version:
+    # Only run if the PR was merged (not if it was closed without merging)
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required to push version changes
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # Important: Use token with write permissions to push version changes
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Configure Git
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+
+      # Determine version bump type based on PR labels
+      - name: Determine version bump type
+        id: bump
+        run: |
+          if [[ "${{ contains(github.event.pull_request.labels.*.name, 'major') }}" == "true" ]]; then
+            echo "BUMP_TYPE=major" >> $GITHUB_ENV
+          elif [[ "${{ contains(github.event.pull_request.labels.*.name, 'minor') }}" == "true" ]]; then
+            echo "BUMP_TYPE=minor" >> $GITHUB_ENV
+          else
+            echo "BUMP_TYPE=patch" >> $GITHUB_ENV
+          fi
+          echo "Using version bump: $BUMP_TYPE based on PR labels"
+
+      # Automatically version based on target branch
+      - name: Version for development branch
+        if: github.event.pull_request.base.ref == 'development'
+        run: |
+          echo "Creating development version..."
+          pnpm run release:${{ env.BUMP_TYPE }} --prerelease dev
+
+      - name: Version for staging branch
+        if: github.event.pull_request.base.ref == 'staging'
+        run: |
+          echo "Creating release candidate version..."
+          pnpm run release:${{ env.BUMP_TYPE }} --prerelease rc
+
+      - name: Version for production branch or main
+        if: github.event.pull_request.base.ref == 'production' || github.event.pull_request.base.ref == 'main'
+        run: |
+          echo "Creating production version..."
+          pnpm run release:${{ env.BUMP_TYPE }}
+
+      - name: Get new version
+        run: |
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          echo "New version is: $NEW_VERSION"
+
+      - name: Push changes
+        run: |
+          echo "Pushing version changes and tags..."
+          git push --follow-tags origin ${{ github.event.pull_request.base.ref }}
+
+      # Create GitHub release for production versions
+      - name: Create GitHub Release
+        if: github.event.pull_request.base.ref == 'production' || github.event.pull_request.base.ref == 'main'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ env.NEW_VERSION }}
+          release_name: Release v${{ env.NEW_VERSION }}
+          body_path: CHANGELOG.md
+          draft: false
+          prerelease: false

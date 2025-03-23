@@ -1,0 +1,80 @@
+{
+  "name": "s-infinite-s",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "build:dev": "tsc -b && vite build --mode development --outDir dist-development",
+    "build:staging": "tsc -b && vite build --mode staging --outDir dist-staging",
+    "postinstall": "pnpm exec simple-git-hooks && pnpm run setup-git-template",
+    "preview": "vite preview",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --ext ts,tsx --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css,md}\"",
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf node_modules dist dist-development dist-staging",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:report": "vitest run --reporter=verbose",
+    "test:coverage": "vitest run --coverage",
+    "setup-git-template": "node scripts/setup-git-template.cjs",
+    "release:patch": "standard-version --release-as patch",
+    "release:minor": "standard-version --release-as minor",
+    "release:major": "standard-version --release-as major"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@eslint/js": "^9.9.0",
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^14.2.1",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "@vitest/coverage-v8": "^1.4.0",
+    "autoprefixer": "10.4.20",
+    "eslint": "^9.9.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.9",
+    "globals": "^15.9.0",
+    "lint-staged": "^15.2.2",
+    "postcss": "8.4.47",
+    "prettier": "3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "rimraf": "^6.0.1",
+    "simple-git-hooks": "^2.12.1",
+    "standard-version": "^9.5.0",
+    "tailwindcss": "3.4.12",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.0.1",
+    "vite": "^5.4.1",
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^1.4.0"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm exec lint-staged",
+    "pre-push": "pnpm run type-check",
+    "commit-msg": "pnpm exec commitlint --edit \\$1"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{html,css,md,json}": [
+      "prettier --write"
+    ]
+  },
+  "packageManager": "pnpm@9.8.0+sha512.8e4c3550fb500e808dbc30bb0ce4dd1eb614e30b1c55245f211591ec2cdf9c611cabd34e1364b42f564bd54b3945ed0f49d61d1bbf2ec9bd74b866fcdc723276"
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "name": "major",
+    "color": "b60205",
+    "description": "Major version bump (breaking changes)"
+  },
+  {
+    "name": "minor",
+    "color": "0e8a16",
+    "description": "Minor version bump (new features)"
+  },
+  {
+    "name": "patch",
+    "color": "1d76db",
+    "description": "Patch version bump (bug fixes)"
+  },
+  {
+    "name": "promotion",
+    "color": "6f42c1",
+    "description": "Promoting changes between environments"
+  },
+  {
+    "name": "bug",
+    "color": "d73a4a",
+    "description": "Something isn't working"
+  },
+  {
+    "name": "documentation",
+    "color": "0075ca",
+    "description": "Improvements or additions to documentation"
+  }
+]

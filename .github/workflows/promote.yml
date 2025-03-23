@@ -1,0 +1,151 @@
+name: Promote Between Environments
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_environment:
+        description: 'Source environment to promote from'
+        required: true
+        default: 'development'
+        type: choice
+        options:
+          - development
+          - staging
+      target_environment:
+        description: 'Target environment to promote to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+      version_bump:
+        description: 'Version bump type (choose "auto" to analyze commits)'
+        required: true
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - patch
+          - minor
+          - major
+          - none
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.target_environment }}
+    # Enable write permissions for the token to create branches and PRs
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # Use better token with necessary permissions
+          token: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Set Git user
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Determine version bump automatically if auto is selected
+      - name: Determine version bump type
+        if: github.event.inputs.version_bump == 'auto'
+        run: |
+          # Get commits since last tag
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          if [ -z "$LAST_TAG" ]; then
+            # No tags exist yet, default to patch
+            echo "BUMP_TYPE=patch" >> $GITHUB_ENV
+            echo "No previous tags found, defaulting to patch bump"
+          else
+            # Check commit messages for version bump indicators
+            if git log $LAST_TAG..HEAD --oneline | grep -iE "(BREAKING CHANGE|feat!:|fix!)"; then
+              echo "BUMP_TYPE=major" >> $GITHUB_ENV
+              echo "Breaking changes detected, using major bump"
+            elif git log $LAST_TAG..HEAD --oneline | grep -iE "^feat(\(.*\))?:"; then
+              echo "BUMP_TYPE=minor" >> $GITHUB_ENV
+              echo "Features detected, using minor bump"
+            else
+              echo "BUMP_TYPE=patch" >> $GITHUB_ENV
+              echo "No major/minor changes detected, using patch bump"
+            fi
+          fi
+
+      # Use manually selected bump type if not auto
+      - name: Set manual bump type
+        if: github.event.inputs.version_bump != 'auto' && github.event.inputs.version_bump != 'none'
+        run: echo "BUMP_TYPE=${{ github.event.inputs.version_bump }}" >> $GITHUB_ENV
+
+      # Create version based on target environment and bump type
+      - name: Create version for promotion
+        if: github.event.inputs.version_bump != 'none'
+        run: |
+          # For promotion to staging
+          if [ "${{ github.event.inputs.target_environment }}" == "staging" ]; then
+            echo "Creating RC version..."
+            pnpm run release:${BUMP_TYPE} --prerelease rc
+
+          # For promotion to production
+          elif [ "${{ github.event.inputs.target_environment }}" == "production" ]; then
+            echo "Creating production version..."
+            pnpm run release:${BUMP_TYPE}
+          fi
+
+      # Install GitHub CLI for creating PRs
+      - name: Install GitHub CLI
+        run: |
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          sudo apt update
+          sudo apt install gh
+
+      # Create a promotion PR
+      - name: Create Promotion PR
+        run: |
+          # Create a temporary promotion branch
+          SOURCE_BRANCH="${{ github.event.inputs.source_environment }}"
+          TARGET_BRANCH="${{ github.event.inputs.target_environment }}"
+          TEMP_BRANCH="promote-${SOURCE_BRANCH}-to-${TARGET_BRANCH}-$(date +%Y%m%d%H%M%S)"
+
+          # Create a branch for promotion
+          git checkout -b ${TEMP_BRANCH}
+
+          # Add PR label for version bump
+          LABELS="--label promotion"
+          if [ "${{ github.event.inputs.version_bump }}" != "none" ]; then
+            LABELS="${LABELS} --label ${{ env.BUMP_TYPE || github.event.inputs.version_bump }}"
+          fi
+
+          # Push the branch and create PR
+          git push -u origin ${TEMP_BRANCH}
+
+          # Create PR with appropriate labels using GitHub CLI
+          gh pr create \
+            --base ${TARGET_BRANCH} \
+            --head ${TEMP_BRANCH} \
+            --title "Promote from ${SOURCE_BRANCH} to ${TARGET_BRANCH}" \
+            --body "This PR promotes changes from ${SOURCE_BRANCH} to ${TARGET_BRANCH}. Version bump: ${{ env.BUMP_TYPE || github.event.inputs.version_bump }}" \
+            ${LABELS}
+        env:
+          # Use a PAT with repository permissions if available, otherwise fall back to GITHUB_TOKEN
+          GITHUB_TOKEN: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_TOKEN }}

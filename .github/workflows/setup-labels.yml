@@ -1,0 +1,33 @@
+name: Setup Repository Labels
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/labels.json'
+    branches:
+      - main
+
+jobs:
+  setup-labels:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Create or update labels
+        run: |
+          # Install GitHub CLI
+          npm add -g github-label-sync
+
+          # Sync labels
+          github-label-sync \
+            --access-token ${{ secrets.GITHUB_TOKEN }} \
+            --labels .github/labels.json \
+            ${{ github.repository }}
