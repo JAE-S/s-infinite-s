@@ -6,18 +6,19 @@ A React-based application using TypeScript and Vite.
 
 - [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Project Architecture](#project-architecture)
-- [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-  - [Development](#development)
 - [Usage](#usage)
-- [Code Quality](#code-quality)
+- [Development Workflow](#development-workflow)
+  - [Common Commands](#common-commands)
+  - [Git Workflow](#git-workflow)
+- [Environment Management](#environment-management)
+- [Continuous Integration & Deployment](#continuous-integration--deployment)
+- [Project Architecture](#project-architecture)
+- [Project Structure](#project-structure)
+- [Code Quality & Standards](#code-quality--standards)
 - [Testing](#testing)
-- [Considerations](#considerations)
-- [Challenges Encountered](#challenges-encountered)
-- [Future Development](#future-development)
 
 ## Features
 
@@ -38,9 +39,96 @@ A React-based application using TypeScript and Vite.
 - **Standard Version**: Semantic versioning
 - **GitHub Actions**: CI/CD pipeline
 
+## Getting Started
+
+### Prerequisites
+
+- Node.js (latest LTS version recommended)
+- PNPM v9.8.0
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone git@github.com:JAE-S/s-infinite-s.git
+   cd s-infinite-s
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   pnpm install
+   ```
+
+3. Start the development server:
+
+   ```bash
+   pnpm dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Usage
+
+// TODO: Add usage instructions and screenshots once the application has been developed.
+
+## Development Workflow
+
+### Common Commands
+
+```bash
+# Development
+pnpm dev                 # Start development server
+pnpm build:dev           # Build for development environment
+pnpm build:staging       # Build for staging environment
+pnpm build               # Build for production
+
+# Code Quality
+pnpm lint                # Check for linting issues
+pnpm lint:fix            # Fix linting issues
+pnpm format              # Format code with Prettier
+pnpm type-check          # Type check TypeScript code
+pnpm organize-imports    # Organize import statements
+
+# Testing
+pnpm test                # Run all tests
+pnpm test:watch          # Run tests in watch mode
+pnpm test:ui             # Run tests with UI
+pnpm test:coverage       # Generate coverage report
+
+# Utilities
+pnpm clean               # Remove build artifacts and node_modules
+```
+
+### Git Workflow
+
+This project follows [Conventional Commits](https://www.conventionalcommits.org/) for commit messages. A commit template is automatically applied when you create a new commit.
+
+**Basic Structure:**
+
+```
+<type>(<scope>): <short summary>
+```
+
+**Common types:**
+
+- `feat`: A new feature
+- `fix`: A bug fix
+- `docs`: Documentation changes
+- `style`: Formatting changes
+- `refactor`: Code changes without adding features or fixing bugs
+- `perf`: Performance improvements
+
+For more details, see [commit_guide.md](.github/commit_guide.md).
+
 ## Project Architecture
 
-// TODO: Define project architecture once the application structure is established.
+This project follows modern React architecture that combines elements of several patterns to create a maintainable structure.
+
+- **Feature-Based Organization**: Components are structured around their functional purpose, with clear separation between reusable UI elements and page-specific views.
+- **Component Composition**: The application uses a hierarchy of component types (layouts, views, components) that compose together to create complete interfaces.
+- **View/Container Pattern**: Separation between container components and presentational components.
 
 ## Project Structure
 
@@ -96,79 +184,74 @@ s-infinite-s/
 └── ...config files
 ```
 
-## Getting Started
+## Environment Management
 
-### Prerequisites
+The application supports three environments:
 
-- Node.js (latest LTS version recommended)
-- PNPM v9.8.0
+1. **Development** - For active development work
 
-### Installation
+   - Branch: `development`
+   - Version format: `1.2.3-dev.1`
 
-1. Clone the repository:
+2. **Staging** - For pre-production testing
 
-   ```bash
-   git clone git@github.com:JAE-S/s-infinite-s.git
-   cd s-infinite-s
-   ```
+   - Branch: `staging`
+   - Version format: `1.2.3-rc.1`
 
-2. Install dependencies:
+3. **Production** - For production deployment
+   - Branch: `production` (with `main` as a mirror)
+   - Version format: `1.2.3`
 
-   ```bash
-   pnpm install
-   ```
+### Environment Configuration
 
-3. Start the development server:
-
-   ```bash
-   pnpm dev
-   ```
-
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-### Development
+Set up environment-specific configuration by copying the example files:
 
 ```bash
-# Start development server
-pnpm dev
+# Development environment
+cp .env.development.example .env.development
 
-# Build
-pnpm build
+# Staging environment
+cp .env.staging.example .env.staging
 
-# Lint code
-pnpm lint
-
-# Preview production build
-pnpm preview
+# Production environment
+cp .env.production.example .env.production
 ```
 
-## Usage
+Each environment has its own configuration file with appropriate settings for that environment. Edit these files to customize environment-specific variables.
 
-// TODO: Add usage instructions and screenshots once the application has been developed.
+For more details on promoting code between environments, see [promotion_guide.md](.github/promotion_guide.md).
 
-## Code Quality
+## Continuous Integration & Deployment
+
+This project uses GitHub Actions for CI/CD:
+
+- **Shared Checks** - Runs linting, type checking, and testing on all branches
+- **Environment-Specific Builds** - Separate workflows for development, staging, and production
+- **Promotion Workflow** - Handles promoting code between environments
+- **Version Management** - Automatically determines version increments based on PR labels
+
+For detailed information about versioning, see [versioning_guide.md](.github/versioning_guide.md).
+
+## Code Quality & Standards
+
+Code quality is maintained through:
 
 - **TypeScript** for type safety
 - **ESLint** for code linting (v9.9.0)
 - **Prettier** for code formatting (v3.3.3)
+- **Simple Git Hooks** for pre-commit checks:
+  - Linting
+  - Type checking
+  - Commit message validation
+- **Import Organization** - Standardized import ordering using a custom script
 
 ## Testing
 
-// TODO: Define testing strategy and implement testing infrastructure.
+The project uses Vitest for testing with the following structure:
 
-## Considerations
+- **Component Tests** - Tests for individual components
+- **Coverage Reports** - Generated in HTML and JSON formats
 
-// TODO: Document design considerations and architectural decisions once they have been made.
+Tests are located close to the code they test, in `__tests__` directories.
 
-## Challenges Encountered
-
-// TODO: Document challenges and solutions as the project progresses.
-
-## Future Development
-
-// TODO: Outline future plans and improvements for the application.
-
-### CI/CD
-
-- Automated semantic versioning (started - Needs further testing to confirm)
-- Make sure the labels defined in the .github folder(labels.json) align with git hub
+// TODO: Add more specific testing strategy once implemented.
