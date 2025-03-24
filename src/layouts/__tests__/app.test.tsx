@@ -1,10 +1,9 @@
+// Third-Party Library Imports
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 
+// Relative Imports
 import App from '../../App';
-
-// Set up necessary jsdom environment
-// @vitest-environment jsdom
 
 describe('App Component', () => {
   it('renders without crashing', () => {

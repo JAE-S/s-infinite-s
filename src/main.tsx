@@ -1,6 +1,8 @@
+// React Core Imports
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
+// Relative Imports
 import App from './App.tsx';
 
 const rootElement = document.getElementById('root');
