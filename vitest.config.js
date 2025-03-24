@@ -18,12 +18,9 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: './src/test/setup.ts',
+    setupFiles: ['./src/test/setup.ts'], // Make sure this is an array for multiple setup files
     include: ['**/*.{test,spec}.{ts,tsx}'],
-    reporters: [
-      'default',
-      'json',
-    ],
+    reporters: ['default', 'json'],
     outputFile: {
       json: `./src/test/results/${dateStamp}-test-results.json`,
     },
@@ -37,11 +34,11 @@ export default defineConfig({
       branches: 70,
       functions: 70,
       lines: 70,
-      statements: 70
+      statements: 70,
     },
     // Store test runtime history
     benchmark: {
-      outputFile: './src/test/results/benchmark.json'
+      outputFile: './src/test/results/benchmark.json',
     },
     // For snapshot testing
     snapshotFormat: {

@@ -81,7 +81,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
     if (!product.rating) return null;
 
     return (
-      <div className="flex items-center" aria-label={`Rating: ${product.rating} out of 5 stars`}>
+      <div
+        className="flex items-center"
+        aria-label={`Rating: ${product.rating} out of 5 stars`}
+        data-testid="product-rating"
+      >
         {[...Array(5)].map((_, i) => (
           <StarIcon
             key={`start-icon-${i}`}
@@ -89,6 +93,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
             height={iconSize}
             className={i < Math.floor(product.rating) ? 'text-primary' : 'text-gray-300'}
             aria-hidden="true"
+            data-testid={`star-icon-${i}`}
           />
         ))}
         <span className="sr-only">{product.rating} out of 5 stars</span>
@@ -119,7 +124,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
   }, [product]);
 
   return (
-    <article className={cardClasses} aria-labelledby={`product-title-${product.id}`}>
+    <article
+      className={cardClasses}
+      aria-labelledby={`product-title-${product.id}`}
+      data-testid={`product-card-${product.id}`}
+    >
       <div className="flex items-center justify-between">
         {/* Info icon and tooltip */}
         <div className="relative">
@@ -130,6 +139,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
             onMouseLeave={handleTooltipHide}
             onFocus={handleTooltipShow}
             onBlur={handleTooltipHide}
+            data-testid="product-info-button"
           >
             <InfoIcon width={iconSize} height={iconSize} />
           </button>
@@ -137,6 +147,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
             <div
               className="absolute z-10 mt-2 w-64 rounded-md bg-white p-2 text-sm text-gray-700 shadow-lg"
               role="tooltip"
+              data-testid="product-tooltip"
             >
               {product.description}
             </div>
@@ -148,7 +159,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
       </div>
 
       {/* Image container with optimized loading */}
-      <div className={imageClasses}>
+      <div className={imageClasses} data-testid="product-image-container">
         <img
           src={product.images[0]}
           alt={`${product.title}`}
@@ -157,15 +168,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
           decoding="async"
           {...{ fetchpriority: 'high' }}
           onError={handleImageError}
+          data-testid="product-image"
         />
       </div>
 
-      <div className="mt-auto flex items-center gap-3 bg-white p-3">
+      <div className="mt-auto flex items-center gap-3 bg-white p-3" data-testid="product-details">
         <div className="flex h-16 flex-col justify-between">
-          <h2 id={`product-title-${product.id}`} className={titleClasses}>
+          <h2
+            id={`product-title-${product.id}`}
+            className={titleClasses}
+            data-testid="product-title"
+          >
             {product.title}
           </h2>
-          <p className={priceClasses}>
+          <p className={priceClasses} data-testid="product-price">
             From <span className="font-semibold">${product.price}</span>
           </p>
         </div>
@@ -174,6 +190,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
           className="ml-2 mr-2 rounded-full p-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           aria-label={`Add ${product.title} to cart`}
           disabled={true}
+          data-testid="add-to-cart-button"
         >
           <ShoppingCartIcon width={cartIconSize} height={cartIconSize} />
         </button>
