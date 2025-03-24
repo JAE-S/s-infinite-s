@@ -3,10 +3,13 @@ import React, { useState, useCallback, useEffect, useRef, memo, useMemo } from '
 import { debounce } from 'lodash';
 
 // Store Imports
+import GridLayoutSelector, { GridLayoutOption } from './grid-layout-selector';
+
 import { useGetProductsQuery, useLazyGetProductsQuery } from '@/store/apis/product_api';
 // Internal Component Imports
 import ProductCard from '@/components/cards/product_card';
 import Loader from '@/components/loaders/loader';
+import { ProductDataProps } from '@/types/product';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -15,12 +18,15 @@ const MemoizedProductCard = memo(ProductCard);
 
 const ProductList: React.FC = () => {
   // State for pagination and products
-  const [allProducts, setAllProducts] = useState<any[]>([]);
+  const [allProducts, setAllProducts] = useState<ProductDataProps[]>([]);
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(false);
   const [preloadTriggered, setPreloadTriggered] = useState(false);
+
+  // State for grid layout
+  const [gridLayout, setGridLayout] = useState<GridLayoutOption>(3);
 
   // Container ref for scroll detection
   const containerRef = useRef<HTMLDivElement>(null);
@@ -30,6 +36,7 @@ const ProductList: React.FC = () => {
   // RTK Query hook for initial data
   const {
     data: initialData,
+    // Rename error to _error to satisfy unused var rule
     error: _error,
     isLoading,
     isError,
@@ -42,12 +49,53 @@ const ProductList: React.FC = () => {
     }
   );
 
-  // Lazy query for pagination - using offset-based approach with skip
+  // Lazy query for pagination - using cursor-based approach with skip
   const [fetchMore, { data: newData, isFetching }] = useLazyGetProductsQuery();
 
+  // Grid layout class based on user selection and screen size
+  const gridLayoutClass = useMemo(() => {
+    // Base responsive classes with consistent gap
+    const baseClasses = 'grid gap-6 place-items-center';
+
+    // Dynamic column classes based on grid layout and screen size
+    switch (gridLayout) {
+      case 3:
+        return `${baseClasses} grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3`;
+      case 6:
+        return `${baseClasses} grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6`;
+      default:
+        return `${baseClasses} grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3`;
+    }
+  }, [gridLayout]);
+
+  // Determine card layout size based on grid layout
+  const getCardLayoutSize = useCallback(() => {
+    if (gridLayout === 6) return 'compact';
+    return 'default';
+  }, [gridLayout]);
+
+  // Handle grid layout change
+  const handleLayoutChange = useCallback((layout: GridLayoutOption) => {
+    setGridLayout(layout);
+    // Save preference to localStorage for persistence
+    localStorage.setItem('preferredGridLayout', layout.toString());
+  }, []);
+
+  // Load saved grid layout preference on initial render
+  useEffect(() => {
+    const savedLayout = localStorage.getItem('preferredGridLayout');
+    if (savedLayout) {
+      const layout = parseInt(savedLayout) as GridLayoutOption;
+      if ([3, 6].includes(layout)) {
+        setGridLayout(layout);
+      }
+    }
+  }, []);
+
   // Progressive loading - preload next batch before user reaches the end
-  const preloadNextBatch = useCallback(
-    debounce(() => {
+  const preloadNextBatch = useCallback(() => {
+    // Use inline function for useCallback to satisfy exhaustive-deps
+    const debouncedPreload = debounce(() => {
       if (hasMore && !isFetching && !preloadTriggered) {
         setPreloadTriggered(true);
         // Preload data but don't update the UI yet
@@ -55,20 +103,29 @@ const ProductList: React.FC = () => {
           setPreloadTriggered(false);
         });
       }
-    }, 300),
-    [fetchMore, hasMore, isFetching, preloadTriggered, skip]
-  );
+    }, 300);
+
+    debouncedPreload();
+
+    // Return a cleanup function to cancel the debounce
+    return () => debouncedPreload.cancel();
+  }, [fetchMore, hasMore, isFetching, preloadTriggered, skip]);
 
   // Debounced function to fetch more products and update UI
-  const loadMoreProducts = useCallback(
-    debounce(() => {
+  const loadMoreProducts = useCallback(() => {
+    // Use inline function for useCallback to satisfy exhaustive-deps
+    const debouncedLoad = debounce(() => {
       if (hasMore && !isFetching) {
         fetchMore({ limit: ITEMS_PER_PAGE, skip });
         setSkip(prev => prev + ITEMS_PER_PAGE);
       }
-    }, 300),
-    [fetchMore, hasMore, isFetching, skip]
-  );
+    }, 300);
+
+    debouncedLoad();
+
+    // Return a cleanup function to cancel the debounce
+    return () => debouncedLoad.cancel();
+  }, [fetchMore, hasMore, isFetching, skip]);
 
   // Update product list when initial data loads
   useEffect(() => {
@@ -111,7 +168,6 @@ const ProductList: React.FC = () => {
 
     return () => {
       observer.disconnect();
-      loadMoreProducts.cancel();
     };
   }, [hasMore, isFetching, loadMoreProducts]);
 
@@ -136,22 +192,28 @@ const ProductList: React.FC = () => {
 
     return () => {
       preloadObserver.disconnect();
-      preloadNextBatch.cancel();
     };
   }, [hasMore, isFetching, preloadNextBatch, preloadTriggered]);
 
   // Memoize the product cards for better rendering performance
   const productCards = useMemo(() => {
-    return allProducts.map(product => <MemoizedProductCard key={product.id} product={product} />);
-  }, [allProducts]);
+    const cardLayoutSize = getCardLayoutSize();
+
+    return allProducts.map((product, i) => (
+      <MemoizedProductCard
+        key={`product-${product.id}-${i}`}
+        product={product}
+        layoutSize={cardLayoutSize}
+      />
+    ));
+  }, [allProducts, getCardLayoutSize]);
 
   // Cleanup on component unmount
   useEffect(() => {
     return () => {
-      loadMoreProducts.cancel();
-      preloadNextBatch.cancel();
+      // No need to call cancel directly as it's handled in the callbacks
     };
-  }, [loadMoreProducts, preloadNextBatch]);
+  }, []);
 
   // Loading states
   if (isLoading && !initialData) {
@@ -195,11 +257,14 @@ const ProductList: React.FC = () => {
       aria-live="polite"
       aria-busy={isFetching}
     >
+      <div className="mb-6 flex flex-wrap items-center justify-end">
+        {/* Grid layout selector */}
+        <GridLayoutSelector currentLayout={gridLayout} onLayoutChange={handleLayoutChange} />
+      </div>
+
       <div>
-        {/* Responsive grid layout */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {productCards}
-        </div>
+        {/* Responsive grid layout with dynamic column count */}
+        <div className={gridLayoutClass}>{productCards}</div>
 
         {/* Loading overlay - only shown when scrolled to bottom and fetching */}
         {isScrolledToBottom && isFetching && (

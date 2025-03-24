@@ -1,55 +1,137 @@
 // React Core Imports
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 
 // Types & Interfaces Imports
 import { ProductDataProps } from '@/types/product';
 // Internal Component Imports
+import InfoIcon from '@/components/icons/info';
 import ShoppingCartIcon from '@/components/icons/shopping-cart';
 import StarIcon from '@/components/icons/star';
-import InfoIcon from '@/components/icons/info';
 
 type ProductCardProps = {
   product: ProductDataProps;
+  layoutSize?: 'default' | 'compact';
 };
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+// Class functions outside of component to prevent recreation on each render
+const getClassesByLayout = {
+  card: {
+    base: 'flex flex-col gap-3 rounded-lg bg-gray-200 p-4 shadow-md h-full',
+    compact: 'w-full',
+    default: 'w-full max-w-72',
+  },
+  image: {
+    base: 'relative w-full overflow-hidden',
+    compact: 'h-40',
+    default: 'h-48',
+  },
+  title: {
+    compact: 'text-sm font-medium',
+    default: 'text-base font-medium',
+  },
+  price: {
+    compact: 'text-xs text-gray-400',
+    default: 'text-sm text-gray-400',
+  },
+  iconSize: {
+    compact: 14,
+    default: 16,
+  },
+  cartIconSize: {
+    compact: 20,
+    default: 24,
+  },
+};
+
+const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'default' }) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
-  // Render rating stars
-  const renderRating = (rating: number) => {
+  // Memoize class computations to prevent recalculation on every render
+  const cardClasses = useMemo(
+    () => `${getClassesByLayout.card.base} ${getClassesByLayout.card[layoutSize]}`,
+    [layoutSize]
+  );
+
+  const imageClasses = useMemo(
+    () => `${getClassesByLayout.image.base} ${getClassesByLayout.image[layoutSize]}`,
+    [layoutSize]
+  );
+
+  const titleClasses = useMemo(
+    () => `${getClassesByLayout.title[layoutSize]} line-clamp-2 overflow-hidden`,
+    [layoutSize]
+  );
+
+  const priceClasses = useMemo(() => getClassesByLayout.price[layoutSize], [layoutSize]);
+
+  const iconSize = getClassesByLayout.iconSize[layoutSize];
+  const cartIconSize = getClassesByLayout.cartIconSize[layoutSize];
+
+  // Toggle tooltip handlers with proper inline functions for exhaustive-deps
+  const handleTooltipShow = useCallback(() => setShowTooltip(true), []);
+  const handleTooltipHide = useCallback(() => setShowTooltip(false), []);
+
+  // Handle image loading error
+  const handleImageError = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = '/placeholder-image.jpg';
+  }, []);
+
+  // Memoize the rating component to prevent recreation on each render
+  const ratingComponent = useMemo(() => {
+    if (!product.rating) return null;
+
     return (
-      <div className="flex items-center" aria-label={`Rating: ${rating} out of 5 stars`}>
+      <div className="flex items-center" aria-label={`Rating: ${product.rating} out of 5 stars`}>
         {[...Array(5)].map((_, i) => (
           <StarIcon
-            key={i}
-            width={16}
-            height={16}
-            className={i < Math.floor(rating) ? 'text-primary' : 'text-gray-300'}
+            key={`start-icon-${i}`}
+            width={iconSize}
+            height={iconSize}
+            className={i < Math.floor(product.rating) ? 'text-primary' : 'text-gray-300'}
             aria-hidden="true"
           />
         ))}
-        <span className="sr-only">{rating} out of 5 stars</span>
+        <span className="sr-only">{product.rating} out of 5 stars</span>
       </div>
     );
-  };
+  }, [product.rating, iconSize]);
+
+  // Memoize the JSON-LD structured data
+  const structuredData = useMemo(() => {
+    return JSON.stringify({
+      '@context': 'https://schema.org/',
+      '@type': 'Product',
+      name: product.title,
+      image: product.images[0],
+      description: product.description,
+      offers: {
+        '@type': 'Offer',
+        price: product.price,
+        priceCurrency: 'USD',
+      },
+      ...(product.rating && {
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: product.rating,
+        },
+      }),
+    });
+  }, [product]);
 
   return (
-    <article
-      className="flex h-96 w-72 flex-col gap-4 rounded-lg bg-gray-200 p-4 shadow-md"
-      aria-labelledby={`product-title-${product.id}`}
-    >
+    <article className={cardClasses} aria-labelledby={`product-title-${product.id}`}>
       <div className="flex items-center justify-between">
-        {/* Badge with info icon and tooltip */}
+        {/* Info icon and tooltip */}
         <div className="relative">
           <button
             className="ml-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             aria-label={`Product information for ${product.title}`}
-            onMouseEnter={() => setShowTooltip(true)}
-            onMouseLeave={() => setShowTooltip(false)}
-            onFocus={() => setShowTooltip(true)}
-            onBlur={() => setShowTooltip(false)}
+            onMouseEnter={handleTooltipShow}
+            onMouseLeave={handleTooltipHide}
+            onFocus={handleTooltipShow}
+            onBlur={handleTooltipHide}
           >
-            <InfoIcon width={16} height={16} />
+            <InfoIcon width={iconSize} height={iconSize} />
           </button>
           {showTooltip && (
             <div
@@ -62,31 +144,28 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
 
         {/* Rating display */}
-        {product.rating && renderRating(product.rating)}
+        {ratingComponent}
       </div>
 
-      {/* Image with optimization */}
-      <div className="relative h-48 w-full overflow-hidden">
+      {/* Image container with optimized loading */}
+      <div className={imageClasses}>
         <img
           src={product.images[0]}
           alt={`${product.title}`}
-          width={400}
-          height={400}
+          className="h-full w-full object-contain"
           loading="lazy"
-          fetchPriority="high"
-          className="h-full w-full object-cover"
-          onError={e => {
-            (e.target as HTMLImageElement).src = '/placeholder-image.jpg';
-          }}
+          decoding="async"
+          {...{ fetchpriority: 'high' }}
+          onError={handleImageError}
         />
       </div>
 
       <div className="mt-auto flex items-center gap-3 bg-white p-3">
-        <div>
-          <h2 id={`product-title-${product.id}`} className="text-base font-medium">
+        <div className="flex h-16 flex-col justify-between">
+          <h2 id={`product-title-${product.id}`} className={titleClasses}>
             {product.title}
           </h2>
-          <p className="text-sm text-gray-400">
+          <p className={priceClasses}>
             From <span className="font-semibold">${product.price}</span>
           </p>
         </div>
@@ -96,7 +175,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           aria-label={`Add ${product.title} to cart`}
           disabled={true}
         >
-          <ShoppingCartIcon width={24} height={24} />
+          <ShoppingCartIcon width={cartIconSize} height={cartIconSize} />
         </button>
       </div>
 
@@ -104,28 +183,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org/',
-            '@type': 'Product',
-            name: product.title,
-            image: product.images[0],
-            description: product.description,
-            offers: {
-              '@type': 'Offer',
-              price: product.price,
-              priceCurrency: 'USD',
-            },
-            ...(product.rating && {
-              aggregateRating: {
-                '@type': 'AggregateRating',
-                ratingValue: product.rating,
-              },
-            }),
-          }),
+          __html: structuredData,
         }}
       />
     </article>
   );
 };
 
-export default ProductCard;
+export default React.memo(ProductCard);
