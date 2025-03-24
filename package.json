@@ -70,7 +70,7 @@
     "vitest": "^1.4.0"
   },
   "simple-git-hooks": {
-    "pre-commit": "pnpm exec lint-staged",
+    "pre-commit": "pnpm run organize-imports:staged && pnpm exec lint-staged",
     "pre-push": "pnpm run type-check",
     "commit-msg": "pnpm exec commitlint --edit $1"
   },
