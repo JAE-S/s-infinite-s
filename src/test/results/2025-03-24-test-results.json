@@ -1,0 +1,32 @@
+{
+  "numTotalTestSuites": 2,
+  "numPassedTestSuites": 2,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 1,
+  "numPassedTests": 1,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "startTime": 1742816015849,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["", "App Component"],
+          "fullName": " App Component renders without crashing",
+          "status": "passed",
+          "title": "renders without crashing",
+          "duration": 48,
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1742816017619,
+      "endTime": 1742816017667,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/jessiesholler/Dropbox/Job_hunting/interview_challenges/Student/s-infinite-s/src/layouts/__tests__/app.test.tsx"
+    }
+  ]
+}

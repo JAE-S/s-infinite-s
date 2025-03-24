@@ -5,12 +5,16 @@ on:
     branches: [staging]
   pull_request:
     branches: [staging]
+  workflow_dispatch:
 
 jobs:
   build-staging:
     name: Build Staging
     runs-on: ubuntu-latest
     environment: staging
+    permissions:
+      contents: read
+      actions: write
 
     steps:
     - uses: actions/checkout@v4
@@ -27,6 +31,9 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+
+    - name: Install Vitest UI
+      run: pnpm add -D @vitest/ui
 
     - name: Build for staging
       run: pnpm run build:staging
@@ -48,7 +55,7 @@ jobs:
       run: cp version.txt dist-staging/
 
     - name: Upload staging build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: staging-build
         path: dist-staging
