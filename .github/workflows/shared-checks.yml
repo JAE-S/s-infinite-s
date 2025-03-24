@@ -5,11 +5,15 @@ on:
     branches: [main, development, staging, production]
   pull_request:
     branches: [main, development, staging, production]
+  workflow_dispatch:
 
 jobs:
   lint-and-test:
     name: Lint and Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
     steps:
     - uses: actions/checkout@v4
 
@@ -25,6 +29,9 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+
+    - name: Install Vitest UI
+      run: pnpm add -D @vitest/ui
 
     - name: Type check
       run: pnpm run type-check

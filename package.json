@@ -1,7 +1,7 @@
 {
   "name": "s-infinite-s",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1-rc.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,6 +13,9 @@
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,md}\"",
+    "organize-imports": "node scripts/organize-imports.cjs",
+    "organize-imports:all": "node scripts/organize-imports.cjs --all",
+    "organize-imports:staged": "node scripts/organize-imports.cjs --staged",
     "type-check": "tsc --noEmit",
     "clean": "rimraf node_modules dist dist-development dist-staging",
     "test": "vitest run",
@@ -27,7 +30,8 @@
   },
   "dependencies": {
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "ts-morph": "^25.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
@@ -41,6 +45,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "@vitest/coverage-v8": "^1.4.0",
+    "@vitest/ui": "^1.6.1",
     "autoprefixer": "10.4.20",
     "eslint": "^9.9.0",
     "eslint-plugin-import": "^2.31.0",
@@ -48,6 +53,7 @@
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
+    "jsdom": "^26.0.0",
     "lint-staged": "^15.2.2",
     "postcss": "8.4.47",
     "prettier": "3.3.3",
@@ -56,6 +62,7 @@
     "simple-git-hooks": "^2.12.1",
     "standard-version": "^9.5.0",
     "tailwindcss": "3.4.12",
+    "terser": "^5.39.0",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^5.4.1",
@@ -63,9 +70,9 @@
     "vitest": "^1.4.0"
   },
   "simple-git-hooks": {
-    "pre-commit": "pnpm exec lint-staged",
+    "pre-commit": "pnpm run organize-imports:staged && pnpm exec lint-staged",
     "pre-push": "pnpm run type-check",
-    "commit-msg": "pnpm exec commitlint --edit \\$1"
+    "commit-msg": "pnpm exec commitlint --edit $1"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
