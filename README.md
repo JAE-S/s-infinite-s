@@ -12,6 +12,7 @@ A React-based application using TypeScript and Vite.
 - [Usage](#usage)
 - [Development Workflow](#development-workflow)
   - [Common Commands](#common-commands)
+  - [Branch Naming Strategy](#branch-naming-strategy)
   - [Git Workflow](#git-workflow)
 - [Environment Management](#environment-management)
 - [Continuous Integration & Deployment](#continuous-integration--deployment)
@@ -100,6 +101,27 @@ pnpm test:coverage       # Generate coverage report
 # Utilities
 pnpm clean               # Remove build artifacts and node_modules
 ```
+
+### Branch Naming Strategy
+
+This project uses a standardized branch naming convention to maintain clarity and organization in our repository.
+
+**Basic Format:**
+
+```
+<prefix>/<ticket-number>-<descriptive-name>
+```
+
+**Common prefixes:**
+
+- `feature/` or `feat/`: New features
+- `fix/`: Bug fixes
+- `hotfix/`: Urgent production fixes
+- `release/`: Release preparation
+- `chore/`: Maintenance tasks
+- `docs/`: Documentation updates
+
+For a complete guide on branch naming conventions, see [branch-naming-guide.md](.github/branch-naming_guide.md).
 
 ### Git Workflow
 
