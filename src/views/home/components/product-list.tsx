@@ -1,15 +1,19 @@
-// React Core Imports
+// Third-Party Library Imports
 import React, { useState, useCallback, useEffect, useRef, memo, useMemo } from 'react';
 import { debounce } from 'lodash';
 
+// React Core Imports
 // Store Imports
 import GridLayoutSelector, { GridLayoutOption } from './grid-layout-selector';
+import ScrollToTopButton from './scroll-to-top-button';
 
 import { useGetProductsQuery, useLazyGetProductsQuery } from '@/store/apis/product_api';
+// Types & Interfaces Imports
+import { ProductDataProps } from '@/types/product';
 // Internal Component Imports
 import ProductCard from '@/components/cards/product_card';
 import Loader from '@/components/loaders/loader';
-import { ProductDataProps } from '@/types/product';
+// Relative Imports
 
 const ITEMS_PER_PAGE = 10;
 
@@ -204,6 +208,7 @@ const ProductList: React.FC = () => {
         key={`product-${product.id}-${i}`}
         product={product}
         layoutSize={cardLayoutSize}
+        data-testid={`product-card-${product.id}`}
       />
     ));
   }, [allProducts, getCardLayoutSize]);
@@ -218,7 +223,11 @@ const ProductList: React.FC = () => {
   // Loading states
   if (isLoading && !initialData) {
     return (
-      <div className="flex w-full justify-center py-10" aria-live="polite">
+      <div
+        className="flex w-full justify-center py-10"
+        aria-live="polite"
+        data-testid="product-list-loading"
+      >
         <Loader size="large" text="Loading products..." />
       </div>
     );
@@ -227,7 +236,11 @@ const ProductList: React.FC = () => {
   // Error state
   if (isError && !initialData) {
     return (
-      <div className="flex w-full flex-col items-center py-10" aria-live="assertive">
+      <div
+        className="flex w-full flex-col items-center py-10"
+        aria-live="assertive"
+        data-testid="product-list-error"
+      >
         <p className="mb-4 text-red-500">Failed to load products</p>
         <button
           onClick={() => refetch()}
@@ -243,7 +256,11 @@ const ProductList: React.FC = () => {
   // Empty state
   if (allProducts.length === 0 && !isLoading) {
     return (
-      <div className="flex w-full justify-center py-10" aria-live="polite">
+      <div
+        className="flex w-full justify-center py-10"
+        aria-live="polite"
+        data-testid="product-list-empty"
+      >
         <p>No products found</p>
       </div>
     );
@@ -257,14 +274,19 @@ const ProductList: React.FC = () => {
       aria-live="polite"
       aria-busy={isFetching}
     >
-      <div className="mb-6 flex flex-wrap items-center justify-end">
+      <div
+        className="mb-6 flex flex-wrap items-center justify-end"
+        data-testid="product-list-controls"
+      >
         {/* Grid layout selector */}
         <GridLayoutSelector currentLayout={gridLayout} onLayoutChange={handleLayoutChange} />
       </div>
 
       <div>
         {/* Responsive grid layout with dynamic column count */}
-        <div className={gridLayoutClass}>{productCards}</div>
+        <div className={gridLayoutClass} data-testid="product-grid">
+          {productCards}
+        </div>
 
         {/* Loading overlay - only shown when scrolled to bottom and fetching */}
         {isScrolledToBottom && isFetching && (
@@ -272,6 +294,7 @@ const ProductList: React.FC = () => {
             className="fixed bottom-0 left-0 right-0 z-10 flex items-center justify-center bg-white bg-opacity-90 py-8 shadow-md"
             aria-live="polite"
             role="status"
+            data-testid="loading-overlay"
           >
             <Loader size="medium" text="Loading more products..." />
           </div>
@@ -279,7 +302,11 @@ const ProductList: React.FC = () => {
 
         {/* End of results message */}
         {!hasMore && allProducts.length > 0 && !isFetching && (
-          <div className="py-8 text-center text-gray-500" aria-live="polite">
+          <div
+            className="py-8 text-center text-gray-500"
+            aria-live="polite"
+            data-testid="end-of-results"
+          >
             You've reached the end of the list
           </div>
         )}
@@ -300,6 +327,9 @@ const ProductList: React.FC = () => {
           aria-hidden="true"
         />
       </div>
+
+      {/* Scroll to top button */}
+      <ScrollToTopButton containerRef={containerRef} />
     </div>
   );
 };
