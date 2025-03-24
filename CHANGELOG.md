@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.1](https://github.com/JAE-S/s-infinite-s/compare/v0.0.1-rc.0...v0.0.1) (2025-03-24)
+
 ### 0.0.1-rc.0 (2025-03-24)
 
 
