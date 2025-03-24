@@ -84,6 +84,32 @@ function organizeImports(filePath) {
   // Check if the file is part of the Redux store structure
   const isReduxStoreFile = filePath.includes('/store/');
 
+  // Helper function to check if an import is store-related
+  const isStoreImport = (source) => {
+    return source.includes('@/store/api/') ||
+      source.includes('@/store/slices/') ||
+      source.includes('@/store/hooks/') ||
+      source.includes('@/store') ||
+      source.includes('./api/') ||
+      source.includes('./slices/') ||
+      source.includes('./hooks/') ||
+      source === './index' ||
+      // These patterns catch relative store paths with varying parent directory depth
+      source.includes('/store/api') ||
+      source.includes('/store/apis') ||
+      source.includes('../store/api') ||
+      source.includes('../../store/api') ||
+      source.includes('../../../store/api') ||
+      source.includes('/store/slices') ||
+      source.includes('../store/slices') ||
+      source.includes('../../store/slices') ||
+      source.includes('../../../store/slices') ||
+      source.includes('/store/hooks') ||
+      source.includes('../store/hooks') ||
+      source.includes('../../store/hooks') ||
+      source.includes('../../../store/hooks');
+  };
+
   // Categorize imports
   importDeclarations.forEach(({ text, source }) => {
     if (isReduxStoreFile) {
@@ -98,16 +124,7 @@ function organizeImports(filePath) {
         source.includes('react-redux')
       ) {
         groups.redux.imports.push(text);
-      } else if (
-        source.includes('@/store/api/') ||
-        source.includes('./api/') ||
-        source.includes('@/store/slices/') ||
-        source.includes('./slices/') ||
-        source.includes('@/store/hooks/') ||
-        source.includes('./hooks/') ||
-        source.includes('@/store') ||
-        source === './index'
-      ) {
+      } else if (isStoreImport(source)) {
         groups.store.imports.push(text);
       } else if (source.includes('lucide-react') || source.includes('@heroicons')) {
         groups.icons.imports.push(text);
@@ -146,12 +163,7 @@ function organizeImports(filePath) {
         source.includes('react-redux')
       ) {
         groups.redux.imports.push(text);
-      } else if (
-        source.includes('@/store/api/') ||
-        source.includes('@/store/slices/') ||
-        source.includes('@/store/hooks/') ||
-        source.includes('@/store')
-      ) {
+      } else if (isStoreImport(source)) {
         groups.store.imports.push(text);
       } else if (source.includes('lucide-react') || source.includes('@heroicons')) {
         groups.icons.imports.push(text);
