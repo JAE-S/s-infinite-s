@@ -3,7 +3,7 @@ import React from 'react';
 
 // Types & Interfaces Imports
 import { ProductDataProps } from '../../types/product';
-// Assets
+// Relative Imports
 import ShoppingCartIcon from '../icons/shopping-cart';
 
 type ProductCardProps = {

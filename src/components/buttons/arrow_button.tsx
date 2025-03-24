@@ -1,7 +1,7 @@
 // React Core Imports
 import React from 'react';
 
-// Assets
+// Relative Imports
 import ArrowLeftIcon from '../icons/arrow-left';
 import ArrowRightIcon from '../icons/arrow-right';
 

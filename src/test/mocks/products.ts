@@ -1,3 +1,4 @@
+// Types & Interfaces Imports
 import { ProductDataProps } from '../../types/product';
 
 export const mockProducts: ProductDataProps[] = [
