@@ -1,13 +1,17 @@
 // React Core Imports
-import React, { ReactNode, Suspense } from 'react';
+import React, { ReactNode, Suspense, useRef } from 'react';
 
-import Loader from '../components/loaders/loader';
+// Internal Component Imports
+import Loader from '@/components/loaders/loader';
 
 type MainLayoutProps = {
   children: ReactNode;
 };
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+  // Ref for main scroll container
+  const scrollContainerRef = useRef<HTMLElement>(null);
+
   return (
     <div className="flex min-h-screen flex-col bg-gray-100">
       {/* Sticky Header */}
@@ -38,6 +42,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         data-testid="main-container"
         className="flex-grow overflow-y-auto bg-gray-100 px-4 py-12 md:px-20"
         role="main"
+        ref={scrollContainerRef}
       >
         <div className="container mx-auto py-8">
           <Suspense fallback={<Loader fullscreen text="Loading..." />}>{children}</Suspense>

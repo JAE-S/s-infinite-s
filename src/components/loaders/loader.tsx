@@ -1,3 +1,4 @@
+// React Core Imports
 import React from 'react';
 
 interface LoaderProps {
@@ -8,7 +9,7 @@ interface LoaderProps {
 }
 
 const Loader: React.FC<LoaderProps> = ({
-  size = 'medium',
+  size = 'large',
   color = 'primary',
   text,
   fullscreen = false,
@@ -49,7 +50,7 @@ const Loader: React.FC<LoaderProps> = ({
 
   // Otherwise render inline
   return (
-    <div className="flex items-center justify-center" data-testid="inline-loader">
+    <div className="flex flex-col items-center justify-center" data-testid="inline-loader">
       <div className={spinnerClasses} role="status" aria-label="Loading" />
       {text && <p className="ml-3 font-medium text-gray-700">{text}</p>}
     </div>

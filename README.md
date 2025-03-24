@@ -20,6 +20,8 @@ A React-based application using TypeScript and Vite.
 - [Project Structure](#project-structure)
 - [Code Quality & Standards](#code-quality--standards)
 - [Testing](#testing)
+- [Considerations](#considerations)
+  - [Infinite Scroll Approach](#infinite-scroll-approach)
 
 ## Features
 
@@ -277,3 +279,46 @@ The project uses Vitest for testing with the following structure:
 Tests are located close to the code they test, in `__tests__` directories.
 
 // TODO: Add more specific testing strategy once implemented.
+
+## Considerations
+
+### Infinite Scroll Approach
+
+The current implementation uses a balanced approach to infinite scrolling that combines the simplicity of local state management with the power of RTK Query optimizations.
+
+Key aspects of this approach include:
+
+1. **Progressive Loading** - Using two Intersection Observers at different distances from the bottom to create a seamless loading experience:
+
+   - A preloader observer (500px from bottom) that triggers data fetching before the user reaches the end
+   - A main loader observer (200px from bottom) that shows the loading indicator when new data is needed
+
+2. **Efficient Data Management** - Combining local React state with RTK Query:
+
+   - Local state provides reliable control over the rendered product list
+   - RTK Query handles caching, data normalization, and network optimization
+   - Immutable data patterns via RTK's Immer integration ensure predictable state updates and optimal rendering performance
+
+3. **Performance Optimizations**:
+
+   - Component memoization to prevent unnecessary re-renders
+   - Debounced loading functions to prevent duplicate API calls
+   - Transparent loading indicator that appears only when needed
+
+4. **Enhanced Backend Integration**:
+   - Offset-based pagination (skip/limit) for the current implementation
+   - Short-lived cache (1 minute) for data freshness
+   - Custom cache key serialization for better hit rates
+   - Data normalization at the API level
+
+This hybrid approach provides excellent performance for current requirements while maintaining the flexibility to implement more advanced optimizations as the marketplace scales.
+
+#### Future Scaling Options
+
+For larger-scale deployments, consider exploring:
+
+- **Virtualized Lists** - Libraries like `react-window` or `react-virtualized` to render only visible items
+- **Windowing Techniques** - Automatically remove off-screen items from the DOM to reduce memory usage
+- **Web Workers** - Offloading heavy computations to separate threads for smoother scrolling
+- **Cursor-based Pagination** - Using references to the last loaded item rather than offset positions, which is more efficient for large, dynamic datasets and avoids the "skipped item" problem when items are added or removed
+- **State Management Optimization** - Using immutable data patterns or considering context splitting

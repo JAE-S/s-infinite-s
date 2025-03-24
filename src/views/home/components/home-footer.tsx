@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Internal Component Imports
-import ArrowButton from '../../../components/buttons/arrow_button';
+import ArrowButton from '@/components/buttons/arrow_button';
 
 const HomeFooter: React.FC = () => {
   return (

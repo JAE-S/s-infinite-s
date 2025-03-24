@@ -1,9 +1,9 @@
 // React Core Imports
 import React from 'react';
 
-// Relative Imports
-import ArrowLeftIcon from '../icons/arrow-left';
-import ArrowRightIcon from '../icons/arrow-right';
+// Internal Component Imports
+import ArrowLeftIcon from '@/components/icons/arrow-left';
+import ArrowRightIcon from '@/components/icons/arrow-right';
 
 type ArrowButtonProps = {
   direction: 'left' | 'right';

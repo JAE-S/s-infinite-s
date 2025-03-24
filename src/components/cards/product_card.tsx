@@ -2,11 +2,11 @@
 import React, { useState } from 'react';
 
 // Types & Interfaces Imports
-import { ProductDataProps } from '../../types/product';
-// Relative Imports
-import ShoppingCartIcon from '../icons/shopping-cart';
-import StarIcon from '../icons/star';
-import InfoIcon from '../icons/info';
+import { ProductDataProps } from '@/types/product';
+// Internal Component Imports
+import ShoppingCartIcon from '@/components/icons/shopping-cart';
+import StarIcon from '@/components/icons/star';
+import InfoIcon from '@/components/icons/info';
 
 type ProductCardProps = {
   product: ProductDataProps;
