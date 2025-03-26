@@ -43,6 +43,12 @@ const IMPORT_GROUPS = {
 };
 
 function organizeImports(filePath) {
+  // Skip test files
+  if (filePath.includes('.test.')) {
+    console.log(`Skipping test file: ${filePath}`);
+    return;
+  }
+
   const project = new Project();
   const sourceFile = project.addSourceFileAtPath(filePath);
 
@@ -302,7 +308,10 @@ function organizeImports(filePath) {
 }
 
 function processFiles(files) {
-  files.forEach(file => {
+  // Filter out .test. files before processing
+  const filteredFiles = files.filter(file => !file.includes('.test.'));
+
+  filteredFiles.forEach(file => {
     try {
       console.log(`Processing file: ${file}`);
       organizeImports(file);
@@ -328,7 +337,10 @@ function findAllTypeScriptFiles() {
 
     const sourceFiles = project.addSourceFilesAtPaths(patterns);
     sourceFiles.forEach(file => {
-      allFiles.push(file.getFilePath());
+      // Skip test files explicitly here as well
+      if (!file.getFilePath().includes('.test.')) {
+        allFiles.push(file.getFilePath());
+      }
     });
   });
 
@@ -361,7 +373,8 @@ function getGitStagedFiles() {
           const normalizedFolder = folder.replace(/^src\//, ''); // Remove 'src/' prefix if it exists
           return file.includes(normalizedFolder) || file.startsWith('src/');
         });
-      });
+      })
+      .filter(file => !file.includes('.test.')); // Exclude test files
   } catch (error) {
     console.error('Error getting staged files:', error);
     return [];
@@ -379,10 +392,11 @@ function main() {
     cwd: process.cwd(),
   });
 
-  // If we have specific files, process those
+  // If we have specific files, process those (excluding test files)
   if (argFiles.length > 0) {
-    console.log(`Processing ${argFiles.length} specific files`);
-    processFiles(argFiles);
+    const nonTestFiles = argFiles.filter(file => !file.includes('.test.'));
+    console.log(`Processing ${nonTestFiles.length} specific files`);
+    processFiles(nonTestFiles);
   }
   // For --all flag, process all files
   else if (process.argv.includes('--all')) {

@@ -13,7 +13,7 @@ const GridLayoutSelector: React.FC<GridLayoutSelectorProps> = ({
   onLayoutChange,
 }) => {
   return (
-    <div className="mb-4 flex items-center space-x-4">
+    <div className="mb-4 flex items-center space-x-4" data-testid="grid-layout-selector">
       <span className="text-sm font-medium text-gray-700">Grid size:</span>
       <div className="flex overflow-hidden rounded-lg border">
         <button
@@ -24,6 +24,7 @@ const GridLayoutSelector: React.FC<GridLayoutSelectorProps> = ({
               : 'bg-white text-gray-700 hover:bg-gray-100'
           }`}
           aria-label="3 columns grid layout"
+          data-testid="layout-3-button"
         >
           3
         </button>
@@ -35,10 +36,15 @@ const GridLayoutSelector: React.FC<GridLayoutSelectorProps> = ({
               : 'bg-white text-gray-700 hover:bg-gray-100'
           }`}
           aria-label="6 columns grid layout"
+          data-testid="layout-6-button"
         >
           6
         </button>
       </div>
+      {/* Add a hidden element for current layout tracking in tests */}
+      <span data-testid="current-layout" className="sr-only">
+        Current: {currentLayout}
+      </span>
     </div>
   );
 };

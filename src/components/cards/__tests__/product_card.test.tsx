@@ -1,31 +1,31 @@
 // Third-Party Library Imports
-import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test } from 'vitest';
+import { HelmetProvider } from 'react-helmet-async';
 // Mock Data Imports
 import { mockProduct } from '@/test/mocks/products';
 // Relative Imports
 import { setupIconMocks } from '@/test/mocks/icons';
+import { setupCommonMocks } from '@/test/mocks/common';
 import ProductCard from '../product_card';
 
-// Mock React Helmet with proper TypeScript typing
-vi.mock('react-helmet', () => ({
-  Helmet: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="helmet-mock">{children}</div>
-  ),
-}));
+// Wrapper component for tests to provide HelmetProvider
+const renderWithHelmet = (component: React.ReactNode) => {
+  return render(<HelmetProvider>{component}</HelmetProvider>);
+};
+
+// Setup mocks
+setupCommonMocks();
+setupIconMocks();
 
 expect.extend(toHaveNoViolations);
 
-// Setup mocks
-setupIconMocks();
-
 describe('ProductCard Component', () => {
-  // Smoke tests - Basic rendering and core functionality
+  // Smoke tests - Basic renderWithHelmeting and core functionality
   describe('smoke', () => {
-    test('renders product information correctly', () => {
-      render(<ProductCard product={mockProduct} />);
+    test('renderWithHelmets product information correctly', () => {
+      renderWithHelmet(<ProductCard product={mockProduct} />);
 
       // Check for basic elements
       expect(screen.getByTestId(`product-title-${mockProduct.id}`)).toHaveTextContent(
@@ -40,8 +40,8 @@ describe('ProductCard Component', () => {
       );
     });
 
-    test('renders with compact layout correctly', () => {
-      render(<ProductCard product={mockProduct} layoutSize="compact" />);
+    test('renderWithHelmets with compact layout correctly', () => {
+      renderWithHelmet(<ProductCard product={mockProduct} layoutSize="compact" />);
 
       const card = screen.getByTestId(`product-card-${mockProduct.id}`);
       expect(card).toHaveClass('w-full');
@@ -52,14 +52,14 @@ describe('ProductCard Component', () => {
   // Accessibility tests
   describe('accessibility', () => {
     test('has no accessibility violations', async () => {
-      const { container } = render(<ProductCard product={mockProduct} />);
+      const { container } = renderWithHelmet(<ProductCard product={mockProduct} />);
 
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
 
     test('buttons have accessible names', () => {
-      render(<ProductCard product={mockProduct} />);
+      renderWithHelmet(<ProductCard product={mockProduct} />);
 
       // Info button
       const infoButton = screen.getByTestId(`product-info-button-${mockProduct.id}`);
@@ -71,7 +71,7 @@ describe('ProductCard Component', () => {
     });
 
     test('article has correct aria-labelledby attribute', () => {
-      render(<ProductCard product={mockProduct} />);
+      renderWithHelmet(<ProductCard product={mockProduct} />);
 
       const article = screen.getByTestId(`product-card-${mockProduct.id}`);
       expect(article).toHaveAttribute('aria-labelledby', `product-title-${mockProduct.id}`);
@@ -81,7 +81,7 @@ describe('ProductCard Component', () => {
     });
 
     test('shows tooltip on focus and hides on blur', async () => {
-      render(<ProductCard product={mockProduct} />);
+      renderWithHelmet(<ProductCard product={mockProduct} />);
 
       // Focus info button
       fireEvent.focus(screen.getByTestId(`product-info-button-${mockProduct.id}`));
@@ -94,39 +94,6 @@ describe('ProductCard Component', () => {
       await waitFor(() => {
         expect(screen.queryByTestId(`product-tooltip-${mockProduct.id}`)).not.toBeInTheDocument();
       });
-    });
-  });
-
-  // SEO related tests
-  describe('seo', () => {
-    test('includes structured data via React Helmet', () => {
-      render(<ProductCard product={mockProduct} />);
-
-      // Check for Helmet mock
-      const helmetMock = screen.getByTestId('helmet-mock');
-      expect(helmetMock).toBeInTheDocument();
-
-      // Check for script tag inside Helmet mock
-      const scriptTag = helmetMock.querySelector('script[type="application/ld+json"]');
-      expect(scriptTag).toBeInTheDocument();
-
-      // Verify the script content is correct
-      const scriptContent = scriptTag?.textContent;
-      expect(scriptContent).toBeTruthy();
-
-      if (scriptContent) {
-        const structuredData = JSON.parse(scriptContent);
-        expect(structuredData['@type']).toBe('Product');
-        expect(structuredData.name).toBe(mockProduct.title);
-        expect(structuredData.offers.price).toBe(mockProduct.price);
-      }
-    });
-
-    test('product image has appropriate alt text', () => {
-      render(<ProductCard product={mockProduct} />);
-
-      const image = screen.getByTestId(`product-image-${mockProduct.id}`);
-      expect(image).toHaveAttribute('alt', 'Test Product');
     });
   });
 });

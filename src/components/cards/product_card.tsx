@@ -1,6 +1,5 @@
 // React Core Imports
 import React, { useState, useMemo, useCallback } from 'react';
-import { Helmet } from 'react-helmet';
 // Types & Interfaces Imports
 import { ProductDataProps } from '@/types/product';
 // Internal Component Imports
@@ -101,39 +100,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
     );
   }, [product.rating, iconSize, product.id]);
 
-  // Memoize the JSON-LD structured data
-  const structuredData = useMemo(() => {
-    return {
-      '@context': 'https://schema.org/',
-      '@type': 'Product',
-      name: product.title,
-      image: product.images[0],
-      description: product.description,
-      offers: {
-        '@type': 'Offer',
-        price: product.price,
-        priceCurrency: 'USD',
-      },
-      ...(product.rating && {
-        aggregateRating: {
-          '@type': 'AggregateRating',
-          ratingValue: product.rating,
-        },
-      }),
-    };
-  }, [product]);
-
   return (
     <article
       className={cardClasses}
       aria-labelledby={`product-title-${product.id}`}
       data-testid={`product-card-${product.id}`}
+      itemScope
+      itemType="https://schema.org/Product"
+      id={`product-${product.id}`}
     >
-      {/* SEO */}
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
-      </Helmet>
-
       <div className="flex items-center justify-between">
         {/* Info icon and tooltip */}
         <div className="relative">
@@ -174,6 +149,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
           {...{ fetchpriority: 'high' }}
           onError={handleImageError}
           data-testid={`product-image-${product.id}`}
+          itemProp="image"
         />
       </div>
 
@@ -186,12 +162,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
             id={`product-title-${product.id}`}
             className={titleClasses}
             data-testid={`product-title-${product.id}`}
+            itemProp="name"
           >
             {product.title}
           </h2>
           <p className={priceClasses} data-testid={`product-price-${product.id}`}>
-            From <span className="font-semibold">${product.price}</span>
+            From{' '}
+            <span className="font-semibold" itemProp="price">
+              ${product.price}
+            </span>
+            <meta itemProp="priceCurrency" content="USD" />
           </p>
+          <meta itemProp="description" content={product.description} />
         </div>
         <div className="ml-auto w-px self-stretch bg-gray-400" aria-hidden="true" />
         <button

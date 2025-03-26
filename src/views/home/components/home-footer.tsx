@@ -5,10 +5,10 @@ import ArrowButton from '@/components/buttons/arrow_button';
 
 const HomeFooter: React.FC = () => {
   return (
-    <>
-      <p className="mb-4 text-4xl font-light">See more produce</p>
+    <div className="align-center flex gap-4">
+      <p className="mb-4 text-4xl font-light">See more products</p>
       <ArrowButton direction="right" />
-    </>
+    </div>
   );
 };
 

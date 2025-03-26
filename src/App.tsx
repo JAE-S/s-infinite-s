@@ -13,6 +13,8 @@
  * - Set up analytics tracking
  */
 
+// Third-Party Library Imports
+import { HelmetProvider } from 'react-helmet-async';
 // Layout Imports
 import MainLayout from './layouts/main_layout';
 // Views Imports
@@ -22,9 +24,11 @@ import './App.css';
 
 function App() {
   return (
-    <MainLayout>
-      <HomeDashboardView />
-    </MainLayout>
+    <HelmetProvider>
+      <MainLayout>
+        <HomeDashboardView />
+      </MainLayout>
+    </HelmetProvider>
   );
 }
 
