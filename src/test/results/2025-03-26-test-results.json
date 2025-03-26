@@ -1,0 +1,98 @@
+{
+  "numTotalTestSuites": 7,
+  "numPassedTestSuites": 7,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 9,
+  "numPassedTests": 9,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "startTime": 1742985347215,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["", "App Component"],
+          "fullName": " App Component renders without crashing",
+          "status": "skipped",
+          "title": "renders without crashing",
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1742985347215,
+      "endTime": 1742985347215,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/jessiesholler/Dropbox/Job_hunting/interview_challenges/Student/s-infinite-s/src/layouts/__tests__/main_layout.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["", "ProductCard Component", "smoke"],
+          "fullName": " ProductCard Component smoke renders product information correctly",
+          "status": "passed",
+          "title": "renders product information correctly",
+          "duration": 54,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component", "smoke"],
+          "fullName": " ProductCard Component smoke renders with compact layout correctly",
+          "status": "passed",
+          "title": "renders with compact layout correctly",
+          "duration": 8,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component", "accessibility"],
+          "fullName": " ProductCard Component accessibility has no accessibility violations",
+          "status": "skipped",
+          "title": "has no accessibility violations",
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component", "accessibility"],
+          "fullName": " ProductCard Component accessibility buttons have accessible names",
+          "status": "skipped",
+          "title": "buttons have accessible names",
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component", "accessibility"],
+          "fullName": " ProductCard Component accessibility article has correct aria-labelledby attribute",
+          "status": "skipped",
+          "title": "article has correct aria-labelledby attribute",
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component", "accessibility"],
+          "fullName": " ProductCard Component accessibility shows tooltip on focus and hides on blur",
+          "status": "skipped",
+          "title": "shows tooltip on focus and hides on blur",
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component", "seo"],
+          "fullName": " ProductCard Component seo includes structured data via React Helmet",
+          "status": "skipped",
+          "title": "includes structured data via React Helmet",
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component", "seo"],
+          "fullName": " ProductCard Component seo product image has appropriate alt text",
+          "status": "skipped",
+          "title": "product image has appropriate alt text",
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1742985353098,
+      "endTime": 1742985353160,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/jessiesholler/Dropbox/Job_hunting/interview_challenges/Student/s-infinite-s/src/components/cards/__tests__/product_card.test.tsx"
+    }
+  ]
+}

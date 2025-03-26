@@ -14,12 +14,17 @@ A React-based application using TypeScript and Vite.
   - [Common Commands](#common-commands)
   - [Branch Naming Strategy](#branch-naming-strategy)
   - [Git Workflow](#git-workflow)
-- [Environment Management](#environment-management)
-- [Continuous Integration & Deployment](#continuous-integration--deployment)
 - [Project Architecture](#project-architecture)
 - [Project Structure](#project-structure)
+- [Environment Management](#environment-management)
+- [Continuous Integration & Deployment](#continuous-integration--deployment)
 - [Code Quality & Standards](#code-quality--standards)
 - [Testing](#testing)
+  - [Test Categories](#test-categories)
+  - [CI Integration](#ci-integration)
+  - [Test Documentation](#test-documentation)
+  - [Future Testing Improvements](#future-testing-improvements)
+- [SEO & Metadata](#seo-&-metadata)
 - [Considerations](#considerations)
   - [Infinite Scroll Approach](#infinite-scroll-approach)
 
@@ -36,6 +41,7 @@ A React-based application using TypeScript and Vite.
 - **TypeScript**: Type Safety (v5.5.3)
 - **Tailwind CSS**: Styling (v3.4.12)
 - **Vite**: Build optimization (v5.4.1)
+- **React Helmet**: Document head management (v6.1.0)
 - **ESLint & Prettier**: Code quality and formatting
 - **PNPM**: Package manager (v9.8.0)
 - **Simple Git Hooks**: Git automation
@@ -95,6 +101,9 @@ pnpm type-check          # Type check TypeScript code
 pnpm organize-imports    # Organize import statements
 
 # Testing
+pnpm test:smoke          # Run smoke tests only
+pnpm test:accessibility  # Run accessibility tests only
+pnpm test:seo            # Run SEO tests only
 pnpm test                # Run all tests
 pnpm test:watch          # Run tests in watch mode
 pnpm test:ui             # Run tests with UI
@@ -158,53 +167,54 @@ This project follows modern React architecture that combines elements of several
 
 ```
 s-infinite-s/
-├── .github/                       # GitHub configuration
-│   ├── templates                  # Templates for standardized formats
-│   │   └── commit-template.txt    # Standard format for Git commit messages
-│   ├── workflows                  # GitHub Actions workflow definitions
-│   │   ├── auto-version.yml       # Automated version bumping workflow
-│   │   ├── development.yml        # CI/CD pipeline for the development environment
-│   │   ├── production.yml         # CI/CD pipeline for the production environment
-│   │   ├── promote.yml            # Workflow for promoting code between environments
-│   │   ├── setup-labels.yml       # Workflow to set up standardized issue/PR labels
-│   │   ├── shared-checks.yml      # Common checks used across different workflows
-│   │   └── staging.yml            # CI/CD pipeline for the staging environment
-│   ├── environments.yml           # Environment configurations and variables
-│   ├── labels.json                # Definitions for custom GitHub issue/PR labels
-│   ├── promotion_guide.md         # Documentation on how to promote code between environments
-│   ├── pull-request_template.md   # Template displayed when creating new pull requests
-│   └── versioning_guide.md        # Guidelines for version numbering and management
-├── .github/                       # Custom scripts
-│   ├── organize-imports.cjs       # Automatically formats import statements in TypeScript/React files by grouping and ordering them according to a predefined standard pattern
-│   └── setup-git-template.cjs     # Sets up Git commit message templates by copying from .github/templates/commit-template.txt to provide standardized commit formatting
+├── .github/                              # GitHub configuration
+│   ├── templates                         # Templates for standardized formats
+│   │   └── commit-template.txt           # Standard format for Git commit messages
+│   ├── workflows                         # GitHub Actions workflow definitions
+│   │   ├── auto-version.yml              # Automated version bumping workflow
+│   │   ├── development.yml               # CI/CD pipeline for the development environment
+│   │   ├── production.yml                # CI/CD pipeline for the production environment
+│   │   ├── promote.yml                   # Workflow for promoting code between environments
+│   │   ├── setup-labels.yml              # Workflow to set up standardized issue/PR labels
+│   │   ├── shared-checks.yml             # Common checks used across different workflows
+│   │   └── staging.yml                   # CI/CD pipeline for the staging environment
+│   ├── environments.yml                  # Environment configurations and variables
+│   ├── labels.json                       # Definitions for custom GitHub issue/PR labels
+│   ├── promotion_guide.md                # Documentation on how to promote code between environments
+│   ├── pull-request_template.md          # Template displayed when creating new pull requests
+│   └── versioning_guide.md               # Guidelines for version numbering and management
+├── .github/                              # Custom scripts
+│   ├── organize-imports.cjs              # Automatically formats import statements in TypeScript/React files by grouping and ordering them according to a predefined standard pattern
+│   └── setup-git-template.cjs            # Sets up Git commit message templates by copying from .github/templates/commit-template.txt to provide standardized commit formatting
 ├── src/
-│   ├── assets/                    # Images, styling, fonts, etc.
-│   ├── components/                # Reusable UI components
-│   │   ├── buttons/               # Button components
-│   │   │   └── __tests__/         # Button-specific tests
-│   │   ├── cards/                 # Card components
-│   │   │   └── __tests__/         # Card-specific tests
-│   │   └── icons/                 # Icon components
-│   │       └── __tests__/         # Icon-specific tests
-│   ├── layouts/                   # Layout components
-│   │   └── __tests__/             # Layout-specific tests
-│   ├── store/                     # Store setup
-│   ├── test/                      # Test configuration and utilities
-│   │   ├── mocks/                 # Mock data and mock functions
-│   │   ├── results/               # Test result reports
-│   │   └── setup.ts               # Test setup configuration
-│   ├── types/                     # TypeScript type definitions
-│   ├── utils/                     # Utility functions
-│   ├── views/                     # Features and feature-specific components
-│   │   └── home/                  # Home essentials feature
-│   │       ├── __tests__/         # Home essentials-specific tests
-│   │       ├── components/        # Home essentials-specific components
+│   ├── assets/                           # Images, styling, fonts, etc.
+│   ├── components/                       # Reusable UI components
+│   │   ├── buttons/                      # Button components
+│   │   │   └── __tests__/                # Button-specific tests
+│   │   ├── cards/                        # Card components
+│   │   │   └── __tests__/                # Card-specific tests
+│   │   └── icons/                        # Icon components
+│   │       └── __tests__/                # Icon-specific tests
+│   ├── layouts/                          # Layout components
+│   │   └── __tests__/                    # Layout-specific tests
+│   ├── store/                            # Store setup
+│   ├── test/                             # Test configuration and utilities
+│   │   ├── mocks/                        # Mock data and mock functions
+│   │   ├── results/                      # Test result reports
+│   │   ├── test_implementation-guide.md  # Guide for writing tests
+│   │   └── setup.ts                      # Test setup configuration
+│   ├── types/                            # TypeScript type definitions
+│   ├── utils/                            # Utility functions
+│   ├── views/                            # Features and feature-specific components
+│   │   └── home/                         # Home essentials feature
+│   │       ├── __tests__/                # Home essentials-specific tests
+│   │       ├── components/               # Home essentials-specific components
 │   │       └── home-dashboard_view.tsx
-│   ├── App.tsx                    # Main App component
-│   ├── App.css                    # Global styles
-│   └── main.tsx                   # Application entry point
-├── vite.config.js                 # Vite configuration
-├── ...env files                   # Environment config files
+│   ├── App.tsx                           # Main App component
+│   ├── App.css                           # Global styles
+│   └── main.tsx                          # Application entry point
+├── vite.config.js                        # Vite configuration
+├── ...env files                          # Environment config files
 └── ...config files
 ```
 
@@ -254,6 +264,7 @@ This project uses GitHub Actions for CI/CD:
 - **Promotion Workflow** - Handles promoting code between environments
 - **Version Management** - Automatically determines version increments based on PR labels
 
+For detailed information about test automation, see [test-automation_guide.md](.github/test-automation_guide.md).
 For detailed information about versioning, see [versioning_guide.md](.github/versioning_guide.md).
 
 ## Code Quality & Standards
@@ -271,14 +282,70 @@ Code quality is maintained through:
 
 ## Testing
 
-The project uses Vitest for testing with the following structure:
+This project uses Vitest for testing with Jest-compatible APIs, focusing on comprehensive test coverage across different test categories.
 
-- **Component Tests** - Tests for individual components
-- **Coverage Reports** - Generated in HTML and JSON formats
+### Test Categories
 
-Tests are located close to the code they test, in `__tests__` directories.
+Our tests are organized into distinct categories:
 
-// TODO: Add more specific testing strategy once implemented.
+- **Smoke Tests**: Verify that core functionality works correctly
+
+  - Run in all environments (development, staging, production)
+  - Focus on critical paths and essential features
+
+- **Accessibility Tests**: Ensure components meet WCAG standards
+
+  - Run in staging and production environments
+  - Use jest-axe for automated accessibility checking
+
+- **SEO Tests**: Verify proper SEO attributes and structured data
+  - Run in production environment only
+  - Test meta tags, structured data, and other SEO elements
+
+### CI Integration
+
+Tests are automatically run as part of the CI/CD pipeline, with different test categories running in different environments:
+
+- **Development**: Smoke tests
+- **Staging**: Smoke tests + Accessibility tests
+- **Production**: Smoke tests + Accessibility tests + SEO tests + Coverage
+
+All tests must pass before code can be merged or deployed to any environment.
+
+### Test Documentation
+
+For more detailed information about our testing approach:
+
+- **.github/test-automation_guide.md**: Documentation for CI/CD testing workflows[test-automation_guide.md](src/test/test-implementation_guide.md)
+- **src/test/test-implementation_guide.md**: Guide for writing and structuring tests[test-implementation_guide.md](src/test/test-implementation_guide.md)
+
+### Future Testing Improvements
+
+- Implement end-to-end (E2E) tests
+- Increase test coverage for complex interactions
+- Add integration tests for Redux store and API interactions
+- Implement more robust testing for error handling, api security, performance etc.
+
+## SEO & Metadata
+
+This project implements robust SEO optimization through React Helmet and structured data that follows Schema.org standards.
+
+### React Helmet
+
+React Helmet is used throughout the application to manage document head content, including:
+
+- Page titles and meta descriptions
+- OpenGraph and Twitter meta tags
+- Canonical URLs
+- Structured data (JSON-LD)
+
+#### Implementation
+
+React Helmet is integrated into:
+
+- Individual product cards for product-specific structured data
+- Page components for page-level metadata
+- Layout components for site-wide defaults
 
 ## Considerations
 
@@ -321,4 +388,3 @@ For larger-scale deployments, consider exploring:
 - **Windowing Techniques** - Automatically remove off-screen items from the DOM to reduce memory usage
 - **Web Workers** - Offloading heavy computations to separate threads for smoother scrolling
 - **Cursor-based Pagination** - Using references to the last loaded item rather than offset positions, which is more efficient for large, dynamic datasets and avoids the "skipped item" problem when items are added or removed
-- **State Management Optimization** - Using immutable data patterns or considering context splitting

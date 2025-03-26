@@ -1,4 +1,4 @@
-name: Shared Checks
+name: Quality & Tests
 
 on:
   push:
@@ -8,36 +8,145 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint-and-test:
-    name: Lint and Test
+  code-quality:
+    name: Code Quality
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: write # Needed to post comments on PRs
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required for accurate branch detection
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
 
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        version: 9
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+          run_install: false
 
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-    - name: Install Vitest UI
-      run: pnpm add -D @vitest/ui
+      - name: Type check
+        run: pnpm run type-check
 
-    - name: Type check
-      run: pnpm run type-check
+      - name: Lint
+        run: pnpm run lint
 
-    - name: Lint
-      run: pnpm run lint
+    # Fail-fast here - no need to run tests if code quality checks fail
 
-    - name: Test
-      run: pnpm run test
+  tests:
+    name: Tests
+    needs: code-quality
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Vitest UI
+        run: pnpm add -D @vitest/ui
+
+      # Determine the target environment based on branch/ref
+      - name: Determine environment
+        id: determine-env
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/development" || "${{ github.base_ref }}" == "development" ]]; then
+            echo "environment=development" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/staging" || "${{ github.base_ref }}" == "staging" ]]; then
+            echo "environment=staging" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/production" || "${{ github.base_ref }}" == "production" || "${{ github.ref }}" == "refs/heads/main" || "${{ github.base_ref }}" == "main" ]]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+          else
+            echo "environment=development" >> $GITHUB_OUTPUT
+          fi
+
+      # Run smoke tests for all environments
+      - name: Run smoke tests
+        run: pnpm run test:smoke
+
+      # Run accessibility tests for staging and production
+      - name: Run accessibility tests
+        if: steps.determine-env.outputs.environment == 'staging' || steps.determine-env.outputs.environment == 'production'
+        run: pnpm run test:accessibility
+
+      # Run SEO tests only for production
+      - name: Run SEO tests
+        if: steps.determine-env.outputs.environment == 'production'
+        run: pnpm run test:seo
+
+      # Run code coverage for production
+      - name: Run test coverage
+        if: steps.determine-env.outputs.environment == 'production'
+        run: pnpm run test:coverage
+
+      # Upload test results as an artifact
+      - name: Upload test results
+        if: always() # Important - run even if tests fail
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            ./coverage
+            ./test-results
+          retention-days: 7
+
+      # Post test summary to PR if this is a pull request
+      - name: Post Test Summary
+        if: github.event_name == 'pull_request' && always()
+        run: |
+          echo "## Test Results Summary" > test-summary.md
+          echo "Environment: ${{ steps.determine-env.outputs.environment }}" >> test-summary.md
+          echo "- Smoke Tests: ${{ job.status == 'success' ? '✅' : '❌' }}" >> test-summary.md
+
+          if [[ "${{ steps.determine-env.outputs.environment }}" == "staging" || "${{ steps.determine-env.outputs.environment }}" == "production" ]]; then
+            echo "- Accessibility Tests: ${{ job.status == 'success' ? '✅' : '❌' }}" >> test-summary.md
+          fi
+
+          if [[ "${{ steps.determine-env.outputs.environment }}" == "production" ]]; then
+            echo "- SEO Tests: ${{ job.status == 'success' ? '✅' : '❌' }}" >> test-summary.md
+            echo "- Code Coverage: ${{ job.status == 'success' ? '✅' : '❌' }}" >> test-summary.md
+          fi
+
+      - name: Find Comment
+        if: github.event_name == 'pull_request' && always()
+        uses: peter-evans/find-comment@v2
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Test Results Summary
+
+      - name: Create or Update Comment
+        if: github.event_name == 'pull_request' && always()
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body-file: test-summary.md
+          edit-mode: replace

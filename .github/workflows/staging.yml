@@ -12,51 +12,58 @@ jobs:
     name: Build Staging
     runs-on: ubuntu-latest
     environment: staging
+    needs: quality-and-tests
     permissions:
       contents: read
       actions: write
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
 
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        version: 9
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+          run_install: false
 
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-    - name: Install Vitest UI
-      run: pnpm add -D @vitest/ui
+      # No test steps - tests are handled by the shared workflow
 
-    - name: Build for staging
-      run: pnpm run build:staging
+      - name: Build for staging
+        run: pnpm run build:staging
 
-    - name: Get version from package.json
-      id: package_version
-      run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+      - name: Get version from package.json
+        id: package_version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
 
-    - name: Set version tag format for staging
-      run: echo "VERSION_TAG=v${VERSION}-rc.$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+      - name: Set version tag format for staging
+        run: echo "VERSION_TAG=v${VERSION}-rc.$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
 
-    - name: Upload version info
-      run: |
-        echo "App Version: ${{ env.VERSION_TAG }}" > version.txt
-        echo "Build Date: $(date -u)" >> version.txt
-        echo "Commit: ${{ github.sha }}" >> version.txt
+      - name: Upload version info
+        run: |
+          echo "App Version: ${{ env.VERSION_TAG }}" > version.txt
+          echo "Build Date: $(date -u)" >> version.txt
+          echo "Commit: ${{ github.sha }}" >> version.txt
 
-    - name: Include version file in artifacts
-      run: cp version.txt dist-staging/
+      - name: Include version file in artifacts
+        run: cp version.txt dist-staging/
 
-    - name: Upload staging build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: staging-build
-        path: dist-staging
-        retention-days: 5
+      - name: Upload staging build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging-build
+          path: dist-staging
+          retention-days: 5
+
+  # Reference to the shared Quality & Tests workflow
+  quality-and-tests:
+    name: Quality and Tests
+    uses: ./.github/workflows/quality-and-tests.yml

@@ -1,5 +1,6 @@
 // React Core Imports
 import React, { useState, useMemo, useCallback } from 'react';
+import { Helmet } from 'react-helmet';
 // Types & Interfaces Imports
 import { ProductDataProps } from '@/types/product';
 // Internal Component Imports
@@ -83,7 +84,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
       <div
         className="flex items-center"
         aria-label={`Rating: ${product.rating} out of 5 stars`}
-        data-testid="product-rating"
+        data-testid={`product-rating-${product.id}`}
       >
         {[...Array(5)].map((_, i) => (
           <StarIcon
@@ -92,17 +93,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
             height={iconSize}
             className={i < Math.floor(product.rating) ? 'text-primary' : 'text-gray-300'}
             aria-hidden="true"
-            data-testid={`star-icon-${i}`}
+            data-testid={`star-icon-${product.id}-${i}`}
           />
         ))}
         <span className="sr-only">{product.rating} out of 5 stars</span>
       </div>
     );
-  }, [product.rating, iconSize]);
+  }, [product.rating, iconSize, product.id]);
 
   // Memoize the JSON-LD structured data
   const structuredData = useMemo(() => {
-    return JSON.stringify({
+    return {
       '@context': 'https://schema.org/',
       '@type': 'Product',
       name: product.title,
@@ -119,7 +120,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
           ratingValue: product.rating,
         },
       }),
-    });
+    };
   }, [product]);
 
   return (
@@ -128,6 +129,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
       aria-labelledby={`product-title-${product.id}`}
       data-testid={`product-card-${product.id}`}
     >
+      {/* SEO */}
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+      </Helmet>
+
       <div className="flex items-center justify-between">
         {/* Info icon and tooltip */}
         <div className="relative">
@@ -138,7 +144,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
             onMouseLeave={handleTooltipHide}
             onFocus={handleTooltipShow}
             onBlur={handleTooltipHide}
-            data-testid="product-info-button"
+            data-testid={`product-info-button-${product.id}`}
           >
             <InfoIcon width={iconSize} height={iconSize} />
           </button>
@@ -146,7 +152,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
             <div
               className="absolute z-10 mt-2 w-64 rounded-md bg-white p-2 text-sm text-gray-700 shadow-lg"
               role="tooltip"
-              data-testid="product-tooltip"
+              data-testid={`product-tooltip-${product.id}`}
             >
               {product.description}
             </div>
@@ -158,7 +164,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
       </div>
 
       {/* Image container with optimized loading */}
-      <div className={imageClasses} data-testid="product-image-container">
+      <div className={imageClasses} data-testid={`product-image-container-${product.id}`}>
         <img
           src={product.images[0]}
           alt={`${product.title}`}
@@ -167,20 +173,23 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
           decoding="async"
           {...{ fetchpriority: 'high' }}
           onError={handleImageError}
-          data-testid="product-image"
+          data-testid={`product-image-${product.id}`}
         />
       </div>
 
-      <div className="mt-auto flex items-center gap-3 bg-white p-3" data-testid="product-details">
+      <div
+        className="mt-auto flex items-center gap-3 bg-white p-3"
+        data-testid={`product-details-${product.id}`}
+      >
         <div className="flex h-16 flex-col justify-between">
           <h2
             id={`product-title-${product.id}`}
             className={titleClasses}
-            data-testid="product-title"
+            data-testid={`product-title-${product.id}`}
           >
             {product.title}
           </h2>
-          <p className={priceClasses} data-testid="product-price">
+          <p className={priceClasses} data-testid={`product-price-${product.id}`}>
             From <span className="font-semibold">${product.price}</span>
           </p>
         </div>
@@ -189,19 +198,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
           className="ml-2 mr-2 rounded-full p-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           aria-label={`Add ${product.title} to cart`}
           disabled={true}
-          data-testid="add-to-cart-button"
+          data-testid={`add-to-cart-button-${product.id}`}
         >
           <ShoppingCartIcon width={cartIconSize} height={cartIconSize} />
         </button>
       </div>
-
-      {/* Schema.org structured data for SEO */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: structuredData,
-        }}
-      />
     </article>
   );
 };
