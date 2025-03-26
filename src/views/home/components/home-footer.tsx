@@ -1,6 +1,5 @@
 // React Core Imports
 import React from 'react';
-
 // Internal Component Imports
 import ArrowButton from '@/components/buttons/arrow_button';
 

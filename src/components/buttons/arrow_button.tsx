@@ -1,6 +1,5 @@
 // React Core Imports
 import React from 'react';
-
 // Internal Component Imports
 import ArrowLeftIcon from '@/components/icons/arrow-left';
 import ArrowRightIcon from '@/components/icons/arrow-right';

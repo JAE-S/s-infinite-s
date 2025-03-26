@@ -1,6 +1,5 @@
 // React Core Imports
 import React, { ReactNode, Suspense, useRef } from 'react';
-
 // Internal Component Imports
 import Loader from '@/components/loaders/loader';
 

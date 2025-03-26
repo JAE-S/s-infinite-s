@@ -1,6 +1,5 @@
 // Redux Core Imports
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
 // Types & Interfaces Imports
 import { ProductDataProps } from '../../types/product';
 
@@ -88,7 +87,7 @@ export const productApi = createApi({
 
     getProductById: builder.query<ProductDataProps, string>({
       query: id => `products/${id}`,
-      providesTags: (result, error, id) => [{ type: 'Product', id }],
+      providesTags: (_result, _error, id) => [{ type: 'Product', id }],
       keepUnusedDataFor: 120, // 2 minutes for individual products
     }),
   }),

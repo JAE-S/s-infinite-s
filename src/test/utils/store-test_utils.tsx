@@ -1,10 +1,9 @@
+// React Core Imports
+import { ReactElement } from 'react';
+import { Provider } from 'react-redux';
 // Third-Party Library Imports
-import React, { ReactElement } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { vi } from 'vitest';
-// React Core Imports
-import { Provider } from 'react-redux';
-
 // Store Imports
 import { store } from '@/store';
 

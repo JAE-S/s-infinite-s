@@ -12,7 +12,6 @@
 // Redux Core Imports
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-
 // Relative Imports
 import { productApi } from './apis/product_api';
 

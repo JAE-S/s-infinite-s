@@ -1,12 +1,11 @@
-// Third-Party Library Imports
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
 // React Core Imports
 import { Provider } from 'react-redux';
-
+// Third-Party Library Imports
+import { render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
+// Store Imports
+import { store } from '@/store';
 // Relative Imports
-import { store } from '../../store';
 import App from '../../App';
 
 vi.mock('../../views/home/components/product-list', () => ({

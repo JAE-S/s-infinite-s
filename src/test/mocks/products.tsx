@@ -1,10 +1,7 @@
 // Third-Party Library Imports
-import React from 'react';
 import { vi } from 'vitest';
-
-// React Core Imports
 // Types & Interfaces Imports
-import { ProductDataProps } from '../../types/product';
+import { ProductDataProps } from '@/types/product';
 
 export const setupIconMocks = () => {
   // Info icon mock

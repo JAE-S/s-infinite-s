@@ -1,15 +1,11 @@
 // Third-Party Library Imports
-import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { describe, expect, test } from 'vitest';
-
-// React Core Imports
 // Mock Data Imports
-import ProductCard from '../product_card';
-
 import { mockProduct, setupIconMocks } from '@/test/mocks/products';
 // Relative Imports
+import ProductCard from '../product_card';
 
 expect.extend(toHaveNoViolations);
 

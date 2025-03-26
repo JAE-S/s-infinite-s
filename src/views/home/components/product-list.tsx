@@ -1,12 +1,8 @@
-// Third-Party Library Imports
-import React, { useState, useCallback, useEffect, useRef, memo, useMemo } from 'react';
-import { debounce } from 'lodash';
-
 // React Core Imports
+import React, { useState, useCallback, useEffect, useRef, memo, useMemo } from 'react';
+// Third-Party Library Imports
+import { debounce } from 'lodash';
 // Store Imports
-import GridLayoutSelector, { GridLayoutOption } from './grid-layout-selector';
-import ScrollToTopButton from './scroll-to-top-button';
-
 import { useGetProductsQuery, useLazyGetProductsQuery } from '@/store/apis/product_api';
 // Types & Interfaces Imports
 import { ProductDataProps } from '@/types/product';
@@ -14,6 +10,8 @@ import { ProductDataProps } from '@/types/product';
 import ProductCard from '@/components/cards/product_card';
 import Loader from '@/components/loaders/loader';
 // Relative Imports
+import GridLayoutSelector, { GridLayoutOption } from './grid-layout-selector';
+import ScrollToTopButton from './scroll-to-top-button';
 
 const ITEMS_PER_PAGE = 10;
 
