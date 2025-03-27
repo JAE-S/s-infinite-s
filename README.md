@@ -27,6 +27,7 @@ A React-based application using TypeScript and Vite.
 - [SEO & Metadata](#seo-&-metadata)
 - [Considerations](#considerations)
   - [Infinite Scroll Approach](#infinite-scroll-approach)
+- [Future Development](#future-development)
 
 ## Features
 
@@ -449,3 +450,24 @@ For larger-scale deployments, consider exploring:
 - **Windowing Techniques** - Automatically remove off-screen items from the DOM to reduce memory usage
 - **Web Workers** - Offloading heavy computations to separate threads for smoother scrolling
 - **Cursor-based Pagination** - Using references to the last loaded item rather than offset positions, which is more efficient for large, dynamic datasets and avoids the "skipped item" problem when items are added or removed
+
+## Future Development
+
+While the current implementation provides a solid foundation, key areas for enhancement in future releases:
+
+### Next.js Integration
+
+- Leverage Next.js for built-in image optimization and responsive image serving
+- Improve SEO through server-side rendering and optimized metadata
+- Enhance performance with automatic code splitting and bundle optimization
+
+### Error Handling
+
+- Implement a global error boundary to gracefully catch and handle all application errors (currently error handling is achieved on a component basis)
+- Provide user-friendly fallback UI for different error scenarios through modals or toasts
+
+### Testing Enhancements
+
+- Expand test coverage with end-to-end with Playwright
+- Ensure cross-browser and cross-device compatibility
+- For Additional enhancement notes see the [testing section](#future-testing-improvements)
