@@ -7,15 +7,18 @@ on:
     branches: [production]
   workflow_dispatch:
 
+# Permissions at the workflow level
+permissions:
+  contents: read
+  pull-requests: write
+  actions: write
+
 jobs:
   build-production:
     name: Build Production
     runs-on: ubuntu-latest
     environment: production
     needs: quality-and-tests
-    permissions:
-      contents: read
-      actions: write
 
     steps:
       - uses: actions/checkout@v4
