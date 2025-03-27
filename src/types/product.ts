@@ -1,7 +1,8 @@
 export interface ProductDataProps {
   id: number;
-  name: string;
+  title: string;
+  description: string;
   price: number;
-  imageSrc: string;
-  badgeText?: string;
+  images: string[];
+  rating: number;
 }

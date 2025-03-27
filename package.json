@@ -16,8 +16,11 @@
     "organize-imports": "node scripts/organize-imports.cjs",
     "organize-imports:all": "node scripts/organize-imports.cjs --all",
     "organize-imports:staged": "node scripts/organize-imports.cjs --staged",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --noEmit -p tsconfig.ci.json",
     "clean": "rimraf node_modules dist dist-development dist-staging",
+    "test:smoke": "vitest run --testNamePattern=\"smoke\"",
+    "test:accessibility": "vitest run --testNamePattern=\"accessibility\"",
+    "test:seo": "vitest run --testNamePattern=\"seo\"",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
@@ -29,8 +32,17 @@
     "release:major": "standard-version --release-as major"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.6.1",
+    "@types/jest-axe": "^3.5.9",
+    "@types/react-helmet": "^6.1.11",
+    "jest-axe": "^10.0.0",
+    "lodash": "^4.17.21",
+    "lucide-react": "^0.483.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-helmet": "^6.1.0",
+    "react-intersection-observer": "^9.16.0",
+    "react-redux": "^9.2.0",
     "ts-morph": "^25.0.1"
   },
   "devDependencies": {
@@ -40,6 +52,7 @@
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
     "@testing-library/user-event": "^14.5.2",
+    "@types/lodash": "^4.17.16",
     "@types/node": "^20.11.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",

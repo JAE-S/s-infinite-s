@@ -10,4 +10,6 @@ const HomeHeader: React.FC = () => {
   );
 };
 
+HomeHeader.displayName = 'HomeHeader';
+
 export default HomeHeader;

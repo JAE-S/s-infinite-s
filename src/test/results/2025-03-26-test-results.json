@@ -1,0 +1,692 @@
+{
+  "numTotalTestSuites": 40,
+  "numPassedTestSuites": 40,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 77,
+  "numPassedTests": 77,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "startTime": 1743009277560,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["", "MainLayout Component", "smoke"],
+          "fullName": " MainLayout Component smoke renders layout with children correctly",
+          "status": "passed",
+          "title": "renders layout with children correctly",
+          "duration": 147,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "MainLayout Component", "smoke"],
+          "fullName": " MainLayout Component smoke header contains site title with link",
+          "status": "passed",
+          "title": "header contains site title with link",
+          "duration": 12,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "MainLayout Component", "smoke"],
+          "fullName": " MainLayout Component smoke footer contains copyright with current year",
+          "status": "passed",
+          "title": "footer contains copyright with current year",
+          "duration": 11,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "MainLayout Component", "accessibility"],
+          "fullName": " MainLayout Component accessibility has no accessibility violations",
+          "status": "passed",
+          "title": "has no accessibility violations",
+          "duration": 99,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "MainLayout Component", "accessibility"],
+          "fullName": " MainLayout Component accessibility has skip to content link for keyboard navigation",
+          "status": "passed",
+          "title": "has skip to content link for keyboard navigation",
+          "duration": 8,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "MainLayout Component", "accessibility"],
+          "fullName": " MainLayout Component accessibility main content has correct id for skip link target",
+          "status": "passed",
+          "title": "main content has correct id for skip link target",
+          "duration": 6,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "MainLayout Component", "accessibility"],
+          "fullName": " MainLayout Component accessibility header and footer have appropriate ARIA labels",
+          "status": "passed",
+          "title": "header and footer have appropriate ARIA labels",
+          "duration": 12,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "MainLayout Component", "content rendering"],
+          "fullName": " MainLayout Component content rendering renders main content area with children",
+          "status": "passed",
+          "title": "renders main content area with children",
+          "duration": 4,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "MainLayout Component", "seo"],
+          "fullName": " MainLayout Component seo includes structured data via React Helmet",
+          "status": "skipped",
+          "title": "includes structured data via React Helmet",
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1743009281572,
+      "endTime": 1743009281874,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/jessiesholler/Dropbox/Job_hunting/interview_challenges/Student/s-infinite-s/src/layouts/__tests__/main_layout.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["", "ArrowButton Component", "smoke"],
+          "fullName": " ArrowButton Component smoke renders left arrow button correctly",
+          "status": "passed",
+          "title": "renders left arrow button correctly",
+          "duration": 32,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ArrowButton Component", "smoke"],
+          "fullName": " ArrowButton Component smoke renders right arrow button correctly",
+          "status": "passed",
+          "title": "renders right arrow button correctly",
+          "duration": 3,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ArrowButton Component", "smoke"],
+          "fullName": " ArrowButton Component smoke uses default aria-labels when no label is provided",
+          "status": "passed",
+          "title": "uses default aria-labels when no label is provided",
+          "duration": 12,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ArrowButton Component", "interaction"],
+          "fullName": " ArrowButton Component interaction calls onClick when clicked",
+          "status": "passed",
+          "title": "calls onClick when clicked",
+          "duration": 11,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ArrowButton Component", "interaction"],
+          "fullName": " ArrowButton Component interaction does not call onClick when disabled",
+          "status": "passed",
+          "title": "does not call onClick when disabled",
+          "duration": 3,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ArrowButton Component", "customization"],
+          "fullName": " ArrowButton Component customization applies different sizes correctly",
+          "status": "passed",
+          "title": "applies different sizes correctly",
+          "duration": 7,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ArrowButton Component", "customization"],
+          "fullName": " ArrowButton Component customization applies different variants correctly",
+          "status": "passed",
+          "title": "applies different variants correctly",
+          "duration": 5,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ArrowButton Component", "customization"],
+          "fullName": " ArrowButton Component customization applies custom className correctly",
+          "status": "passed",
+          "title": "applies custom className correctly",
+          "duration": 2,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ArrowButton Component", "customization"],
+          "fullName": " ArrowButton Component customization applies disabled styling correctly",
+          "status": "passed",
+          "title": "applies disabled styling correctly",
+          "duration": 5,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ArrowButton Component", "accessibility"],
+          "fullName": " ArrowButton Component accessibility has no accessibility violations",
+          "status": "passed",
+          "title": "has no accessibility violations",
+          "duration": 135,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ArrowButton Component", "accessibility"],
+          "fullName": " ArrowButton Component accessibility uses custom aria-label when provided",
+          "status": "passed",
+          "title": "uses custom aria-label when provided",
+          "duration": 4,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ArrowButton Component", "accessibility"],
+          "fullName": " ArrowButton Component accessibility adds sr-only text when label is provided",
+          "status": "passed",
+          "title": "adds sr-only text when label is provided",
+          "duration": 3,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ArrowButton Component", "accessibility"],
+          "fullName": " ArrowButton Component accessibility has appropriate focus styling",
+          "status": "passed",
+          "title": "has appropriate focus styling",
+          "duration": 1,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ArrowButton Component", "accessibility"],
+          "fullName": " ArrowButton Component accessibility sets icons as decorative with aria-hidden",
+          "status": "passed",
+          "title": "sets icons as decorative with aria-hidden",
+          "duration": 10,
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1743009279226,
+      "endTime": 1743009279463,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/jessiesholler/Dropbox/Job_hunting/interview_challenges/Student/s-infinite-s/src/components/buttons/__tests__/arrow_button.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["", "ProductCard Component", "smoke"],
+          "fullName": " ProductCard Component smoke renderWithHelmets product information correctly",
+          "status": "passed",
+          "title": "renderWithHelmets product information correctly",
+          "duration": 41,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component", "smoke"],
+          "fullName": " ProductCard Component smoke renderWithHelmets with compact layout correctly",
+          "status": "passed",
+          "title": "renderWithHelmets with compact layout correctly",
+          "duration": 10,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component", "accessibility"],
+          "fullName": " ProductCard Component accessibility has no accessibility violations",
+          "status": "passed",
+          "title": "has no accessibility violations",
+          "duration": 256,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component", "accessibility"],
+          "fullName": " ProductCard Component accessibility buttons have accessible names",
+          "status": "passed",
+          "title": "buttons have accessible names",
+          "duration": 7,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component", "accessibility"],
+          "fullName": " ProductCard Component accessibility article has correct aria-labelledby attribute",
+          "status": "passed",
+          "title": "article has correct aria-labelledby attribute",
+          "duration": 7,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component", "accessibility"],
+          "fullName": " ProductCard Component accessibility shows tooltip on focus and hides on blur",
+          "status": "passed",
+          "title": "shows tooltip on focus and hides on blur",
+          "duration": 20,
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1743009283084,
+      "endTime": 1743009283425,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/jessiesholler/Dropbox/Job_hunting/interview_challenges/Student/s-infinite-s/src/components/cards/__tests__/product_card.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["", "Loader Component", "smoke"],
+          "fullName": " Loader Component smoke renders loader correctly with default props",
+          "status": "passed",
+          "title": "renders loader correctly with default props",
+          "duration": 35,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "Loader Component", "smoke"],
+          "fullName": " Loader Component smoke renders with small size correctly",
+          "status": "passed",
+          "title": "renders with small size correctly",
+          "duration": 63,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "Loader Component", "smoke"],
+          "fullName": " Loader Component smoke renders with medium size correctly",
+          "status": "passed",
+          "title": "renders with medium size correctly",
+          "duration": 12,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "Loader Component", "smoke"],
+          "fullName": " Loader Component smoke renders with different colors correctly",
+          "status": "passed",
+          "title": "renders with different colors correctly",
+          "duration": 12,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "Loader Component", "smoke"],
+          "fullName": " Loader Component smoke renders text when provided",
+          "status": "passed",
+          "title": "renders text when provided",
+          "duration": 7,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "Loader Component", "smoke"],
+          "fullName": " Loader Component smoke renders as fullscreen when fullscreen prop is true",
+          "status": "passed",
+          "title": "renders as fullscreen when fullscreen prop is true",
+          "duration": 3,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "Loader Component", "accessibility"],
+          "fullName": " Loader Component accessibility has no accessibility violations",
+          "status": "passed",
+          "title": "has no accessibility violations",
+          "duration": 49,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "Loader Component", "accessibility"],
+          "fullName": " Loader Component accessibility has no accessibility violations when fullscreen",
+          "status": "passed",
+          "title": "has no accessibility violations when fullscreen",
+          "duration": 25,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "Loader Component", "accessibility"],
+          "fullName": " Loader Component accessibility spinner has appropriate aria attributes",
+          "status": "passed",
+          "title": "spinner has appropriate aria attributes",
+          "duration": 8,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "Loader Component", "accessibility"],
+          "fullName": " Loader Component accessibility fullscreen loader maintains appropriate aria attributes",
+          "status": "passed",
+          "title": "fullscreen loader maintains appropriate aria attributes",
+          "duration": 9,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "Loader Component", "visual customization"],
+          "fullName": " Loader Component visual customization combines size and color correctly",
+          "status": "passed",
+          "title": "combines size and color correctly",
+          "duration": 6,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "Loader Component", "visual customization"],
+          "fullName": " Loader Component visual customization displays text with correct styling in fullscreen mode",
+          "status": "passed",
+          "title": "displays text with correct styling in fullscreen mode",
+          "duration": 2,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "Loader Component", "visual customization"],
+          "fullName": " Loader Component visual customization displays text with correct styling in inline mode",
+          "status": "passed",
+          "title": "displays text with correct styling in inline mode",
+          "duration": 6,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "Loader Component", "edge cases"],
+          "fullName": " Loader Component edge cases renders correctly without text",
+          "status": "passed",
+          "title": "renders correctly without text",
+          "duration": 2,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "Loader Component", "edge cases"],
+          "fullName": " Loader Component edge cases renders correctly with empty text",
+          "status": "passed",
+          "title": "renders correctly with empty text",
+          "duration": 2,
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1743009281238,
+      "endTime": 1743009281481,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/jessiesholler/Dropbox/Job_hunting/interview_challenges/Student/s-infinite-s/src/components/loaders/__tests__/loader.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["", "GridLayoutSelector Component", "smoke"],
+          "fullName": " GridLayoutSelector Component smoke renders component correctly",
+          "status": "passed",
+          "title": "renders component correctly",
+          "duration": 42,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "GridLayoutSelector Component", "smoke"],
+          "fullName": " GridLayoutSelector Component smoke applies active styling to current layout option",
+          "status": "passed",
+          "title": "applies active styling to current layout option",
+          "duration": 11,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "GridLayoutSelector Component", "smoke"],
+          "fullName": " GridLayoutSelector Component smoke displays current layout in hidden span",
+          "status": "passed",
+          "title": "displays current layout in hidden span",
+          "duration": 8,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "GridLayoutSelector Component", "interaction"],
+          "fullName": " GridLayoutSelector Component interaction calls onLayoutChange when buttons are clicked",
+          "status": "passed",
+          "title": "calls onLayoutChange when buttons are clicked",
+          "duration": 19,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "GridLayoutSelector Component", "interaction"],
+          "fullName": " GridLayoutSelector Component interaction continues to call onLayoutChange when clicking the active layout",
+          "status": "passed",
+          "title": "continues to call onLayoutChange when clicking the active layout",
+          "duration": 5,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "GridLayoutSelector Component", "accessibility"],
+          "fullName": " GridLayoutSelector Component accessibility has no accessibility violations",
+          "status": "passed",
+          "title": "has no accessibility violations",
+          "duration": 160,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "GridLayoutSelector Component", "accessibility"],
+          "fullName": " GridLayoutSelector Component accessibility buttons have appropriate aria labels",
+          "status": "passed",
+          "title": "buttons have appropriate aria labels",
+          "duration": 4,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "GridLayoutSelector Component", "accessibility"],
+          "fullName": " GridLayoutSelector Component accessibility buttons have accessible attributes",
+          "status": "passed",
+          "title": "buttons have accessible attributes",
+          "duration": 4,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "GridLayoutSelector Component", "edge cases"],
+          "fullName": " GridLayoutSelector Component edge cases handles repeated clicks on same button",
+          "status": "passed",
+          "title": "handles repeated clicks on same button",
+          "duration": 6,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "GridLayoutSelector Component", "edge cases"],
+          "fullName": " GridLayoutSelector Component edge cases still functions correctly with layout prop changes",
+          "status": "passed",
+          "title": "still functions correctly with layout prop changes",
+          "duration": 18,
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1743009281233,
+      "endTime": 1743009281511,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/jessiesholler/Dropbox/Job_hunting/interview_challenges/Student/s-infinite-s/src/views/home/__tests__/grid-layout-selector.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["", "ProductList Component", "smoke"],
+          "fullName": " ProductList Component smoke renders product list with correct grid layout",
+          "status": "passed",
+          "title": "renders product list with correct grid layout",
+          "duration": 73,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductList Component", "smoke"],
+          "fullName": " ProductList Component smoke changes product card layout when grid layout changes",
+          "status": "passed",
+          "title": "changes product card layout when grid layout changes",
+          "duration": 35,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductList Component", "smoke"],
+          "fullName": " ProductList Component smoke sets up intersection observers for infinite scrolling",
+          "status": "passed",
+          "title": "sets up intersection observers for infinite scrolling",
+          "duration": 16,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductList Component", "smoke"],
+          "fullName": " ProductList Component smoke displays loading state when data is loading",
+          "status": "passed",
+          "title": "displays loading state when data is loading",
+          "duration": 7,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductList Component", "smoke"],
+          "fullName": " ProductList Component smoke displays error state and retry button when there is an error",
+          "status": "passed",
+          "title": "displays error state and retry button when there is an error",
+          "duration": 5,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductList Component", "smoke"],
+          "fullName": " ProductList Component smoke displays empty state when no products are returned",
+          "status": "passed",
+          "title": "displays empty state when no products are returned",
+          "duration": 4,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductList Component", "smoke"],
+          "fullName": " ProductList Component smoke shows end of results message when there are no more products",
+          "status": "passed",
+          "title": "shows end of results message when there are no more products",
+          "duration": 11,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductList Component", "accessibility"],
+          "fullName": " ProductList Component accessibility has no accessibility violations",
+          "status": "passed",
+          "title": "has no accessibility violations",
+          "duration": 263,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductList Component", "accessibility"],
+          "fullName": " ProductList Component accessibility has appropriate ARIA attributes for accessibility",
+          "status": "passed",
+          "title": "has appropriate ARIA attributes for accessibility",
+          "duration": 10,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductList Component", "accessibility"],
+          "fullName": " ProductList Component accessibility loading area has appropriate ARIA attributes",
+          "status": "passed",
+          "title": "loading area has appropriate ARIA attributes",
+          "duration": 5,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductList Component", "accessibility"],
+          "fullName": " ProductList Component accessibility error state has assertive ARIA live region",
+          "status": "passed",
+          "title": "error state has assertive ARIA live region",
+          "duration": 3,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductList Component", "seo"],
+          "fullName": " ProductList Component seo includes structured data via React Helmet",
+          "status": "skipped",
+          "title": "includes structured data via React Helmet",
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1743009279402,
+      "endTime": 1743009279835,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/jessiesholler/Dropbox/Job_hunting/interview_challenges/Student/s-infinite-s/src/views/home/__tests__/product-list.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["", "ScrollToTopButton Component", "smoke"],
+          "fullName": " ScrollToTopButton Component smoke renders the button correctly",
+          "status": "passed",
+          "title": "renders the button correctly",
+          "duration": 31,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ScrollToTopButton Component", "smoke"],
+          "fullName": " ScrollToTopButton Component smoke button is initially hidden when scroll position is at top",
+          "status": "passed",
+          "title": "button is initially hidden when scroll position is at top",
+          "duration": 5,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ScrollToTopButton Component", "smoke"],
+          "fullName": " ScrollToTopButton Component smoke button becomes visible when scrolled past threshold",
+          "status": "passed",
+          "title": "button becomes visible when scrolled past threshold",
+          "duration": 15,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ScrollToTopButton Component", "interaction"],
+          "fullName": " ScrollToTopButton Component interaction calls window.scrollTo when clicked",
+          "status": "passed",
+          "title": "calls window.scrollTo when clicked",
+          "duration": 11,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ScrollToTopButton Component", "customization"],
+          "fullName": " ScrollToTopButton Component customization applies correct position classes for bottom-right",
+          "status": "passed",
+          "title": "applies correct position classes for bottom-right",
+          "duration": 3,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ScrollToTopButton Component", "customization"],
+          "fullName": " ScrollToTopButton Component customization applies correct position classes for bottom-left",
+          "status": "passed",
+          "title": "applies correct position classes for bottom-left",
+          "duration": 3,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ScrollToTopButton Component", "customization"],
+          "fullName": " ScrollToTopButton Component customization uses custom scroll threshold",
+          "status": "passed",
+          "title": "uses custom scroll threshold",
+          "duration": 8,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ScrollToTopButton Component", "accessibility"],
+          "fullName": " ScrollToTopButton Component accessibility has no accessibility violations",
+          "status": "passed",
+          "title": "has no accessibility violations",
+          "duration": 142,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ScrollToTopButton Component", "accessibility"],
+          "fullName": " ScrollToTopButton Component accessibility has appropriate aria attributes",
+          "status": "passed",
+          "title": "has appropriate aria attributes",
+          "duration": 3,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ScrollToTopButton Component", "accessibility"],
+          "fullName": " ScrollToTopButton Component accessibility is focusable when visible",
+          "status": "passed",
+          "title": "is focusable when visible",
+          "duration": 4,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ScrollToTopButton Component", "cleanup"],
+          "fullName": " ScrollToTopButton Component cleanup removes scroll event listener on unmount",
+          "status": "passed",
+          "title": "removes scroll event listener on unmount",
+          "duration": 6,
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1743009279232,
+      "endTime": 1743009279465,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/jessiesholler/Dropbox/Job_hunting/interview_challenges/Student/s-infinite-s/src/views/home/__tests__/scroll-to-top-button.test.tsx"
+    }
+  ]
+}

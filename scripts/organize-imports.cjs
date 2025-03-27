@@ -14,16 +14,19 @@ const TARGET_FOLDERS = [
   'src/store/api',
   'src/store/hooks',
   'src/store/middleware',
-  'src/store/slices'
+  'src/store/slices',
 ];
 
 // Define the import group comments once - Updated with new categories and order
 const IMPORT_GROUPS = {
-  thirdParty: '// Third-Party Library Imports',
+  // External imports (builtin & external)
   react: '// React Core Imports',
   router: '// React Router Imports',
   redux: '// Redux Core Imports',
+  thirdParty: '// Third-Party Library Imports',
   icons: '// Icon Imports',
+
+  // Internal imports
   store: '// Store Imports',
   types: '// Types & Interfaces Imports',
   utils: '// Utility Function Imports',
@@ -32,12 +35,20 @@ const IMPORT_GROUPS = {
   components: '// Internal Component Imports',
   styles: '// Styling Imports',
   assets: '// Assets',
+
+  // Parent/sibling/index imports
   mocks: '// Mock Data Imports',
-  relative: '// Relative Imports',
   other: '// Additional Imports',
+  relative: '// Relative Imports',
 };
 
 function organizeImports(filePath) {
+  // Skip test files
+  if (filePath.includes('.test.')) {
+    console.log(`Skipping test file: ${filePath}`);
+    return;
+  }
+
   const project = new Project();
   const sourceFile = project.addSourceFileAtPath(filePath);
 
@@ -60,7 +71,7 @@ function organizeImports(filePath) {
   // Collect all import declarations
   const importDeclarations = sourceFile.getImportDeclarations().map(decl => ({
     text: decl.getText(),
-    source: decl.getModuleSpecifierValue()
+    source: decl.getModuleSpecifierValue(),
   }));
 
   // Early return if no imports to organize
@@ -69,7 +80,8 @@ function organizeImports(filePath) {
   }
 
   // Find the last import to determine where imports end
-  const lastImportDecl = sourceFile.getImportDeclarations()[sourceFile.getImportDeclarations().length - 1];
+  const lastImportDecl =
+    sourceFile.getImportDeclarations()[sourceFile.getImportDeclarations().length - 1];
   const lastImportEnd = lastImportDecl.getEnd();
 
   // Get content after imports, skipping any import-related comments
@@ -83,6 +95,34 @@ function organizeImports(filePath) {
 
   // Check if the file is part of the Redux store structure
   const isReduxStoreFile = filePath.includes('/store/');
+
+  // Helper function to check if an import is store-related
+  const isStoreImport = source => {
+    return (
+      source.includes('@/store/api/') ||
+      source.includes('@/store/slices/') ||
+      source.includes('@/store/hooks/') ||
+      source.includes('@/store') ||
+      source.includes('./api/') ||
+      source.includes('./slices/') ||
+      source.includes('./hooks/') ||
+      source === './index' ||
+      // These patterns catch relative store paths with varying parent directory depth
+      source.includes('/store/api') ||
+      source.includes('/store/apis') ||
+      source.includes('../store/api') ||
+      source.includes('../../store/api') ||
+      source.includes('../../../store/api') ||
+      source.includes('/store/slices') ||
+      source.includes('../store/slices') ||
+      source.includes('../../store/slices') ||
+      source.includes('../../../store/slices') ||
+      source.includes('/store/hooks') ||
+      source.includes('../store/hooks') ||
+      source.includes('../../store/hooks') ||
+      source.includes('../../../store/hooks')
+    );
+  };
 
   // Categorize imports
   importDeclarations.forEach(({ text, source }) => {
@@ -98,26 +138,25 @@ function organizeImports(filePath) {
         source.includes('react-redux')
       ) {
         groups.redux.imports.push(text);
-      } else if (
-        source.includes('@/store/api/') ||
-        source.includes('./api/') ||
-        source.includes('@/store/slices/') ||
-        source.includes('./slices/') ||
-        source.includes('@/store/hooks/') ||
-        source.includes('./hooks/') ||
-        source.includes('@/store') ||
-        source === './index'
-      ) {
+      } else if (isStoreImport(source)) {
         groups.store.imports.push(text);
       } else if (source.includes('lucide-react') || source.includes('@heroicons')) {
         groups.icons.imports.push(text);
-      } else if (source.includes('@/types/') || source.includes('./types/') || source.includes('../types/')) {
+      } else if (
+        source.includes('@/types/') ||
+        source.includes('./types/') ||
+        source.includes('../types/')
+      ) {
         groups.types.imports.push(text);
       } else if (source.includes('@/layout') || source.includes('./layout')) {
         groups.layout.imports.push(text);
       } else if (source.includes('@/views') || source.includes('./views')) {
         groups.views.imports.push(text);
-      } else if (source.includes('@/mocks') || source.includes('./mocks') || source.includes('../mocks')) {
+      } else if (
+        source.includes('@/mocks') ||
+        source.includes('./mocks') ||
+        source.includes('../mocks')
+      ) {
         groups.mocks.imports.push(text);
       } else if (
         !source.startsWith('./') &&
@@ -126,10 +165,7 @@ function organizeImports(filePath) {
       ) {
         // Consider it a third-party library if it's not a relative or alias import
         groups.thirdParty.imports.push(text);
-      } else if (
-        source.startsWith('./') ||
-        source.startsWith('../')
-      ) {
+      } else if (source.startsWith('./') || source.startsWith('../')) {
         groups.relative.imports.push(text);
       } else {
         groups.other.imports.push(text);
@@ -146,12 +182,7 @@ function organizeImports(filePath) {
         source.includes('react-redux')
       ) {
         groups.redux.imports.push(text);
-      } else if (
-        source.includes('@/store/api/') ||
-        source.includes('@/store/slices/') ||
-        source.includes('@/store/hooks/') ||
-        source.includes('@/store')
-      ) {
+      } else if (isStoreImport(source)) {
         groups.store.imports.push(text);
       } else if (source.includes('lucide-react') || source.includes('@heroicons')) {
         groups.icons.imports.push(text);
@@ -161,18 +192,31 @@ function organizeImports(filePath) {
         groups.views.imports.push(text);
       } else if (source.includes('/components/') || source.startsWith('./components/')) {
         groups.components.imports.push(text);
-      } else if (source.includes('/utils/') || source.includes('/helpers/') || source.startsWith('./utils/')) {
-        groups.utils.imports.push(text);
       } else if (
-        source.includes('/types') ||
-        source.includes('/interfaces/')
+        source.includes('/utils/') ||
+        source.includes('/helpers/') ||
+        source.startsWith('./utils/')
       ) {
+        groups.utils.imports.push(text);
+      } else if (source.includes('/types') || source.includes('/interfaces/')) {
         groups.types.imports.push(text);
-      } else if (source.includes('/styles/') || source.endsWith('.css') || source.endsWith('.scss')) {
+      } else if (
+        source.includes('/styles/') ||
+        source.endsWith('.css') ||
+        source.endsWith('.scss')
+      ) {
         groups.styles.imports.push(text);
-      } else if (source.includes('/assets/') || source.endsWith('.svg') || source.endsWith('.png')) {
+      } else if (
+        source.includes('/assets/') ||
+        source.endsWith('.svg') ||
+        source.endsWith('.png')
+      ) {
         groups.assets.imports.push(text);
-      } else if (source.includes('/mocks') || source.includes('./mocks') || source.includes('../mocks')) {
+      } else if (
+        source.includes('/mocks') ||
+        source.includes('./mocks') ||
+        source.includes('../mocks')
+      ) {
         groups.mocks.imports.push(text);
       } else if (
         !source.startsWith('./') &&
@@ -181,10 +225,7 @@ function organizeImports(filePath) {
       ) {
         // Consider it a third-party library if it's not a relative or alias import
         groups.thirdParty.imports.push(text);
-      } else if (
-        source.startsWith('./') ||
-        source.startsWith('../')
-      ) {
+      } else if (source.startsWith('./') || source.startsWith('../')) {
         groups.relative.imports.push(text);
       } else {
         groups.other.imports.push(text);
@@ -267,7 +308,10 @@ function organizeImports(filePath) {
 }
 
 function processFiles(files) {
-  files.forEach((file) => {
+  // Filter out .test. files before processing
+  const filteredFiles = files.filter(file => !file.includes('.test.'));
+
+  filteredFiles.forEach(file => {
     try {
       console.log(`Processing file: ${file}`);
       organizeImports(file);
@@ -282,7 +326,7 @@ function findAllTypeScriptFiles() {
   const project = new Project();
   const allFiles = [];
 
-  TARGET_FOLDERS.forEach((folder) => {
+  TARGET_FOLDERS.forEach(folder => {
     const folderPath = join(rootDir, folder);
     const patterns = [
       join(folderPath, '*.ts'),
@@ -292,8 +336,11 @@ function findAllTypeScriptFiles() {
     ];
 
     const sourceFiles = project.addSourceFilesAtPaths(patterns);
-    sourceFiles.forEach((file) => {
-      allFiles.push(file.getFilePath());
+    sourceFiles.forEach(file => {
+      // Skip test files explicitly here as well
+      if (!file.getFilePath().includes('.test.')) {
+        allFiles.push(file.getFilePath());
+      }
     });
   });
 
@@ -318,15 +365,16 @@ function getGitStagedFiles() {
 
     return result
       .split('\n')
-      .filter((line) => line.length > 0) // Remove empty lines
-      .filter((file) => /\.(ts|tsx)$/.test(file)) // Only TS/TSX files
-      .filter((file) => {
+      .filter(line => line.length > 0) // Remove empty lines
+      .filter(file => /\.(ts|tsx)$/.test(file)) // Only TS/TSX files
+      .filter(file => {
         // Check if the file is in any of our target folders or subfolders
-        return TARGET_FOLDERS.some((folder) => {
+        return TARGET_FOLDERS.some(folder => {
           const normalizedFolder = folder.replace(/^src\//, ''); // Remove 'src/' prefix if it exists
           return file.includes(normalizedFolder) || file.startsWith('src/');
         });
-      });
+      })
+      .filter(file => !file.includes('.test.')); // Exclude test files
   } catch (error) {
     console.error('Error getting staged files:', error);
     return [];
@@ -335,7 +383,7 @@ function getGitStagedFiles() {
 
 function main() {
   // Get files passed as arguments
-  const argFiles = process.argv.slice(2).filter((arg) => !arg.startsWith('-'));
+  const argFiles = process.argv.slice(2).filter(arg => !arg.startsWith('-'));
 
   console.log('Import organizer running with:', {
     command: process.env.npm_lifecycle_event,
@@ -344,10 +392,11 @@ function main() {
     cwd: process.cwd(),
   });
 
-  // If we have specific files, process those
+  // If we have specific files, process those (excluding test files)
   if (argFiles.length > 0) {
-    console.log(`Processing ${argFiles.length} specific files`);
-    processFiles(argFiles);
+    const nonTestFiles = argFiles.filter(file => !file.includes('.test.'));
+    console.log(`Processing ${nonTestFiles.length} specific files`);
+    processFiles(nonTestFiles);
   }
   // For --all flag, process all files
   else if (process.argv.includes('--all')) {
@@ -361,7 +410,7 @@ function main() {
     const stagedFiles = getGitStagedFiles();
     if (stagedFiles.length > 0) {
       console.log(`Processing ${stagedFiles.length} staged files`);
-      processFiles(stagedFiles.map((file) => join(process.cwd(), file)));
+      processFiles(stagedFiles.map(file => join(process.cwd(), file)));
     } else {
       console.log('No staged files to process');
     }
