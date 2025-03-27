@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.1-rc.2](https://github.com/JAE-S/s-infinite-s/compare/v0.0.1-rc.1...v0.0.1-rc.2) (2025-03-27)
+
+
+### Bug Fixes
+
+* git actions permissions updated ([d983819](https://github.com/JAE-S/s-infinite-s/commit/d983819266655e3b263ae71f21354c01e5a332af))
+* mismatch dep react-helmet-async ([ef38ef7](https://github.com/JAE-S/s-infinite-s/commit/ef38ef77b69d80a8fc414ca5d14c78ed38aacf5d))
+* pnpm lock file recreated ([d62995f](https://github.com/JAE-S/s-infinite-s/commit/d62995fe552b7f8e368b22fcc28fcfdf469f52a0))
+* reusable workflow glitch) ([8177bf9](https://github.com/JAE-S/s-infinite-s/commit/8177bf9292fb89e0d30ffafe7fccb7e842d0971a))
+
 ### [0.0.1-rc.1](https://github.com/JAE-S/s-infinite-s/compare/v0.0.1-rc.0...v0.0.1-rc.1) (2025-03-27)
 
 
