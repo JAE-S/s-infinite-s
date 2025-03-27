@@ -71,10 +71,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Install missing react-helmet-async dependency
-      - name: Install missing dependencies
-        run: pnpm add -D react-helmet-async
-
       - name: Install Vitest UI
         run: pnpm add -D @vitest/ui
 
