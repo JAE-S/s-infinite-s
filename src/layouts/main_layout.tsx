@@ -1,3 +1,4 @@
+// React Core Imports
 import React, { ReactNode, Suspense, useRef, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 // Internal Component Imports
@@ -53,6 +54,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
         defaultTitle="Infinite Scroll Marketplace"
         titleTemplate="%s | Infinite Scroll Marketplace"
       >
+        <title>{title}</title>
         <meta name="description" content={description} />
         {canonical && <link rel="canonical" href={canonical} />}
 
@@ -79,7 +81,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
         aria-label="Marketplace header"
         data-testid="site-header"
       >
-        <div className="container mx-auto flex items-center justify-between p-4">
+        <div className="mx-auto flex items-center justify-between p-4 md:px-20">
           <h1 className="text-2xl font-semibold text-gray-900">
             <a
               href="/"
@@ -127,5 +129,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
     </div>
   );
 };
+
+MainLayout.displayName = 'MainLayout';
 
 export default MainLayout;

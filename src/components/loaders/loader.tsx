@@ -56,5 +56,6 @@ const Loader: React.FC<LoaderProps> = ({
     </div>
   );
 };
+Loader.displayName = 'Loader';
 
 export default Loader;

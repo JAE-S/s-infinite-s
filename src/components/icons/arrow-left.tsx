@@ -6,7 +6,7 @@ type IconProps = {
   height: number;
 };
 
-const ArrowRightIcon: React.FC<IconProps> = ({ width, height }) => {
+const ArrowLeftIcon: React.FC<IconProps> = ({ width, height }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -18,12 +18,13 @@ const ArrowRightIcon: React.FC<IconProps> = ({ width, height }) => {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="lucide lucide-arrow-right"
+      className="lucide lucide-arrow-left"
     >
       <path d="M5 12h14" />
-      <path d="m12 5 7 7-7 7" />
+      <path d="m12 19-7-7 7-7" />
     </svg>
   );
 };
+ArrowLeftIcon.displayName = 'ArrowLeftIcon';
 
-export default ArrowRightIcon;
+export default ArrowLeftIcon;

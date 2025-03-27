@@ -12,4 +12,6 @@ const HomeFooter: React.FC = () => {
   );
 };
 
+HomeFooter.displayName = 'HomeFooter';
+
 export default HomeFooter;

@@ -1,5 +1,4 @@
 // Third-Party Library Imports
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { describe, expect, test, vi } from 'vitest';

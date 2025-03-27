@@ -38,7 +38,6 @@ const ProductList: React.FC = () => {
   // RTK Query hook for initial data
   const {
     data: initialData,
-    // Rename error to _error to satisfy unused var rule
     error: _error,
     isLoading,
     isError,
@@ -211,13 +210,6 @@ const ProductList: React.FC = () => {
     ));
   }, [allProducts, getCardLayoutSize]);
 
-  // Cleanup on component unmount
-  useEffect(() => {
-    return () => {
-      // No need to call cancel directly as it's handled in the callbacks
-    };
-  }, []);
-
   // Loading states
   if (isLoading && !initialData) {
     return (
@@ -331,5 +323,7 @@ const ProductList: React.FC = () => {
     </div>
   );
 };
+
+ProductList.displayName = 'ProductList';
 
 export default ProductList;

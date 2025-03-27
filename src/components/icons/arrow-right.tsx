@@ -25,5 +25,6 @@ const ArrowRightIcon: React.FC<IconProps> = ({ width, height }) => {
     </svg>
   );
 };
+ArrowRightIcon.displayName = 'ArrowRightIcon';
 
 export default ArrowRightIcon;

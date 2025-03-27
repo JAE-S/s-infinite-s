@@ -1,11 +1,9 @@
 // Third-Party Library Imports
-import { render, screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { describe, expect, test } from 'vitest';
-// React Helmet Async Imports
-import { HelmetProvider } from 'react-helmet-async';
-// Import common mocks
-import { setupCommonMocks } from '@/test/mocks/common';
+// Mock Data Imports
+import { getHelmetData, renderWithHelmet, setupCommonMocks } from '@/test/mocks/common';
 
 // Setup all common mocks
 setupCommonMocks();
@@ -14,11 +12,6 @@ expect.extend(toHaveNoViolations);
 
 // Import after mocks
 import MainLayout from '../main_layout';
-
-// Wrapper component to provide HelmetProvider context
-const renderWithHelmet = (component: React.ReactNode) => {
-  return render(<HelmetProvider>{component}</HelmetProvider>);
-};
 
 describe('MainLayout Component', () => {
   // Smoke tests - Basic rendering and core functionality
@@ -112,10 +105,101 @@ describe('MainLayout Component', () => {
 
   // SEO related tests
   describe('seo', () => {
-    test.skip('includes structured data via React Helmet', async () => {
-      // TODO: Future development
-      // This test is currently skipped due to potential async rendering complexities
-      // Needs further investigation to properly test Helmet-rendered structured data
+    test('includes default SEO meta tags', async () => {
+      renderWithHelmet(<MainLayout>Test Content</MainLayout>);
+
+      // Wait for Helmet to update the document head
+      await waitFor(() => {
+        const helmetData = getHelmetData();
+
+        // Check title
+        expect(helmetData.title).toBe('Infinite Scroll Marketplace | Infinite Scroll Marketplace');
+
+        // Check meta tags
+        const descriptionTag = helmetData.metaTags.find(tag => tag.name === 'description');
+        expect(descriptionTag?.content).toBe(
+          'Discover amazing products with our infinite scroll marketplace'
+        );
+
+        // Check OG tags
+        const ogTitleTag = helmetData.metaTags.find(tag => tag.name === 'og:title');
+        expect(ogTitleTag?.content).toBe('Infinite Scroll Marketplace');
+
+        const ogDescriptionTag = helmetData.metaTags.find(tag => tag.name === 'og:description');
+        expect(ogDescriptionTag?.content).toBe(
+          'Discover amazing products with our infinite scroll marketplace'
+        );
+
+        // Check Twitter Card tags
+        const twitterCardTag = helmetData.metaTags.find(tag => tag.name === 'twitter:card');
+        expect(twitterCardTag?.content).toBe('summary_large_image');
+      });
+    });
+
+    test('includes structured data via React Helmet', async () => {
+      renderWithHelmet(<MainLayout>Test Content</MainLayout>);
+
+      await waitFor(() => {
+        const helmetData = getHelmetData();
+
+        // Find the JSON-LD script
+        const jsonLdScript = helmetData.scriptTags.find(
+          script => script.type === 'application/ld+json'
+        );
+
+        expect(jsonLdScript).toBeDefined();
+
+        if (jsonLdScript) {
+          const scriptContent = jsonLdScript.innerHTML;
+          const parsedContent = JSON.parse(scriptContent);
+
+          // Verify structured data content
+          expect(parsedContent['@context']).toBe('https://schema.org');
+          expect(parsedContent['@type']).toBe('WebSite');
+          expect(parsedContent.name).toBe('Infinite Scroll Marketplace');
+          expect(parsedContent.description).toBe(
+            'Discover amazing products with our infinite scroll marketplace'
+          );
+        }
+      });
+    });
+
+    test('applies custom SEO props correctly', async () => {
+      const customSEO = {
+        title: 'Custom Page Title',
+        description: 'Custom page description for testing',
+        canonical: 'https://example.com/custom-page',
+        openGraph: {
+          title: 'Custom OG Title',
+          description: 'Custom OG description',
+          image: '/custom-image.jpg',
+          url: 'https://example.com/custom-og-page',
+        },
+      };
+
+      renderWithHelmet(<MainLayout {...customSEO}>Test Content</MainLayout>);
+
+      await waitFor(() => {
+        const helmetData = getHelmetData();
+
+        // Check title - account for the titleTemplate in Helmet
+        expect(helmetData.title).toBe('Custom Page Title | Infinite Scroll Marketplace');
+        // Check description
+        const descriptionTag = helmetData.metaTags.find(tag => tag.name === 'description');
+        expect(descriptionTag?.content).toBe('Custom page description for testing');
+        // Check canonical link
+        const canonicalLink = helmetData.linkTags.find(link => link.rel === 'canonical');
+        expect(canonicalLink?.href).toBe('https://example.com/custom-page');
+        // Check custom OG tags
+        const ogTitleTag = helmetData.metaTags.find(tag => tag.name === 'og:title');
+        expect(ogTitleTag?.content).toBe('Custom OG Title');
+
+        const ogImageTag = helmetData.metaTags.find(tag => tag.name === 'og:image');
+        expect(ogImageTag?.content).toBe('/custom-image.jpg');
+
+        const ogUrlTag = helmetData.metaTags.find(tag => tag.name === 'og:url');
+        expect(ogUrlTag?.content).toBe('https://example.com/custom-og-page');
+      });
     });
   });
 });

@@ -189,4 +189,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, layoutSize = 'defaul
   );
 };
 
+ProductCard.displayName = 'ProductCard';
+
 export default React.memo(ProductCard);

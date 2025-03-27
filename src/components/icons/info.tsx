@@ -28,4 +28,6 @@ const InfoIcon: React.FC<IconProps> = ({ width = 24, height = 24, className = ''
   );
 };
 
+InfoIcon.displayName = 'InfoIcon';
+
 export default InfoIcon;

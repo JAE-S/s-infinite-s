@@ -1,9 +1,8 @@
 // Third-Party Library Imports
-import { screen, fireEvent, within, render } from '@testing-library/react';
+import { screen, fireEvent, within } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { describe, expect, test, vi, beforeEach } from 'vitest';
-import { HelmetProvider } from 'react-helmet-async';
-// Mocks
+// Mock Data Imports
 import { mockProducts } from '@/test/mocks/products';
 
 // Use basic mocks for all external dependencies
@@ -55,6 +54,7 @@ vi.mock('../grid-layout-selector', () => ({
 
 // Import components AFTER mocks
 import { useGetProductsQuery, useLazyGetProductsQuery } from '@/store/apis/product_api';
+import { renderWithHelmet } from '@/test/mocks/common';
 import ProductList from '../components/product-list';
 
 // Create mock functions
@@ -77,11 +77,6 @@ window.IntersectionObserver = vi.fn().mockImplementation(() => ({
 }));
 
 expect.extend(toHaveNoViolations);
-
-// Wrapper component for tests to provide HelmetProvider
-const renderWithHelmet = (component: React.ReactNode) => {
-  return render(<HelmetProvider>{component}</HelmetProvider>);
-};
 
 describe('ProductList Component', () => {
   beforeEach(() => {

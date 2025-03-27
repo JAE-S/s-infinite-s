@@ -26,5 +26,6 @@ const ShoppingCartIcon: React.FC<IconProps> = ({ width = 24, height = 24 }) => {
     </svg>
   );
 };
+ShoppingCartIcon.displayName = 'ShoppingCartIcon';
 
 export default ShoppingCartIcon;

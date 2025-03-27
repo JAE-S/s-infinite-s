@@ -14,5 +14,6 @@ const HomeDashboardView: React.FC = () => {
     </section>
   );
 };
+HomeDashboardView.displayName = 'HomeDashboardView';
 
 export default HomeDashboardView;

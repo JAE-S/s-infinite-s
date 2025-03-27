@@ -48,5 +48,6 @@ const GridLayoutSelector: React.FC<GridLayoutSelectorProps> = ({
     </div>
   );
 };
+GridLayoutSelector.displayName = 'GridLayoutSelector';
 
 export default GridLayoutSelector;

@@ -1,19 +1,13 @@
 // Third-Party Library Imports
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { describe, expect, test } from 'vitest';
-import { HelmetProvider } from 'react-helmet-async';
 // Mock Data Imports
 import { mockProduct } from '@/test/mocks/products';
-// Relative Imports
 import { setupIconMocks } from '@/test/mocks/icons';
-import { setupCommonMocks } from '@/test/mocks/common';
+import { renderWithHelmet, setupCommonMocks } from '@/test/mocks/common';
+// Relative Imports
 import ProductCard from '../product_card';
-
-// Wrapper component for tests to provide HelmetProvider
-const renderWithHelmet = (component: React.ReactNode) => {
-  return render(<HelmetProvider>{component}</HelmetProvider>);
-};
 
 // Setup mocks
 setupCommonMocks();

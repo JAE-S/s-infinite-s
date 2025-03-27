@@ -25,5 +25,6 @@ const StarIcon: React.FC<IconProps> = ({ width = 24, height = 24, className = ''
     </svg>
   );
 };
+StarIcon.displayName = 'StarIcon';
 
 export default StarIcon;
