@@ -33,7 +33,7 @@ const getClassesByLayout = {
     default: 'text-sm text-gray-400',
   },
   iconSize: {
-    compact: 14,
+    compact: 18,
     default: 16,
   },
   cartIconSize: {

@@ -117,20 +117,28 @@ jobs:
           retention-days: 7
 
       # Post test summary to PR if this is a pull request
+      - name: Set success status for summary
+        if: success()
+        run: echo "TEST_STATUS=✅" >> $GITHUB_ENV
+
+      - name: Set failure status for summary
+        if: failure()
+        run: echo "TEST_STATUS=❌" >> $GITHUB_ENV
+
       - name: Post Test Summary
         if: github.event_name == 'pull_request' && always()
         run: |
           echo "## Test Results Summary" > test-summary.md
           echo "Environment: ${{ steps.determine-env.outputs.environment }}" >> test-summary.md
-          echo "- Smoke Tests: ${{ job.status == 'success' ? '✅' : '❌' }}" >> test-summary.md
+          echo "- Smoke Tests: ${{ env.TEST_STATUS }}" >> test-summary.md
 
           if [[ "${{ steps.determine-env.outputs.environment }}" == "staging" || "${{ steps.determine-env.outputs.environment }}" == "production" ]]; then
-            echo "- Accessibility Tests: ${{ job.status == 'success' ? '✅' : '❌' }}" >> test-summary.md
+            echo "- Accessibility Tests: ${{ env.TEST_STATUS }}" >> test-summary.md
           fi
 
           if [[ "${{ steps.determine-env.outputs.environment }}" == "production" ]]; then
-            echo "- SEO Tests: ${{ job.status == 'success' ? '✅' : '❌' }}" >> test-summary.md
-            echo "- Code Coverage: ${{ job.status == 'success' ? '✅' : '❌' }}" >> test-summary.md
+            echo "- SEO Tests: ${{ env.TEST_STATUS }}" >> test-summary.md
+            echo "- Code Coverage: ${{ env.TEST_STATUS }}" >> test-summary.md
           fi
 
       - name: Find Comment
