@@ -6,6 +6,7 @@ on:
   pull_request:
     branches: [main, development, staging, production]
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   code-quality:
