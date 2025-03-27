@@ -16,7 +16,7 @@
     "organize-imports": "node scripts/organize-imports.cjs",
     "organize-imports:all": "node scripts/organize-imports.cjs --all",
     "organize-imports:staged": "node scripts/organize-imports.cjs --staged",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --noEmit -p tsconfig.ci.json",
     "clean": "rimraf node_modules dist dist-development dist-staging",
     "test:smoke": "vitest run --testNamePattern=\"smoke\"",
     "test:accessibility": "vitest run --testNamePattern=\"accessibility\"",
