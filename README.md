@@ -27,6 +27,7 @@ A React-based application using TypeScript and Vite.
 - [SEO & Metadata](#seo-&-metadata)
 - [Considerations](#considerations)
   - [Infinite Scroll Approach](#infinite-scroll-approach)
+- [Future Development](#future-development)
 
 ## Features
 
@@ -80,7 +81,68 @@ A React-based application using TypeScript and Vite.
 
 ## Usage
 
-// TODO: Add usage instructions and screenshots once the application has been developed.
+The Infinite Scroll Marketplace provides a seamless shopping experience with dynamically loaded products as you scroll through the catalog.
+
+The application displays a clean, modern interface with the "Home Office Essentials" heading prominently displayed at the top.
+
+![Home page showing product grid with Home Office Essentials heading](./doc-images/homescreen.png)
+
+### Key Features
+
+#### Product Grid Layout
+
+Products are displayed in a responsive grid layout that adapts to different screen sizes:
+
+- Toggle between 3-column and 6-column layouts using the grid size selector in the top right
+- Each product card shows:
+  - Product image
+  - Star rating (out of 5)
+  - Product name
+  - Price
+  - Add to cart button
+
+#### Product Details
+
+Hovering over the information icon on a product card reveals additional product details:
+
+<div align="left">
+  <img src="./doc-images/description_tooltip.png" alt="Product detail showing the Essence Mascara Lash Princess product description" height="300">
+</div>
+
+#### Infinite Scroll
+
+The application automatically loads more products as you scroll down:
+
+- A loading indicator appears at the bottom of the page when new products are being fetched
+
+![Loading more products indicator at the bottom of the page](./doc-images/infinite_scroll_loading.png)
+
+#### End of the list
+
+- "You've reached the end of the list" message appears when all products have been loaded
+
+![You've reached the end of the list](./doc-images/end_of_list.png)
+
+#### Navigation
+
+- Use the "See more products" button at the bottom to load additional products
+- A scroll-to-top button appears when scrolling down, allowing quick navigation back to the top of the page
+
+### Accessibility Features
+
+The application is built with accessibility in mind:
+
+- All product images have appropriate alt text
+- Semantic HTML structure for better screen reader navigation
+- Skip to content link for keyboard users
+
+### Responsive Design
+
+The application adapts seamlessly to different screen sizes:
+
+- Desktop: 3 or 6 column layouts depending on user preference
+  - Note: slight ui bug on smaller screens when 6 columns are selected
+- Mobile: Single column layout for the best mobile experience
 
 ## Development Workflow
 
@@ -388,3 +450,24 @@ For larger-scale deployments, consider exploring:
 - **Windowing Techniques** - Automatically remove off-screen items from the DOM to reduce memory usage
 - **Web Workers** - Offloading heavy computations to separate threads for smoother scrolling
 - **Cursor-based Pagination** - Using references to the last loaded item rather than offset positions, which is more efficient for large, dynamic datasets and avoids the "skipped item" problem when items are added or removed
+
+## Future Development
+
+While the current implementation provides a solid foundation, key areas for enhancement in future releases:
+
+### Next.js Integration
+
+- Leverage Next.js for built-in image optimization and responsive image serving
+- Improve SEO through server-side rendering and optimized metadata
+- Enhance performance with automatic code splitting and bundle optimization
+
+### Error Handling
+
+- Implement a global error boundary to gracefully catch and handle all application errors (currently error handling is achieved on a component basis)
+- Provide user-friendly fallback UI for different error scenarios through modals or toasts
+
+### Testing Enhancements
+
+- Expand test coverage with end-to-end with Playwright
+- Ensure cross-browser and cross-device compatibility
+- For Additional enhancement notes see the [testing section](#future-testing-improvements)

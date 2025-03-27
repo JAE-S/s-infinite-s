@@ -6,14 +6,18 @@ on:
   pull_request:
     branches: [main, development, staging, production]
   workflow_dispatch:
+  workflow_call:
+
+# Define default permissions
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   code-quality:
     name: Code Quality
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write # Needed to post comments on PRs
+    # Permissions inherited from caller or workflow level
 
     steps:
       - uses: actions/checkout@v4
@@ -47,9 +51,7 @@ jobs:
     name: Tests
     needs: code-quality
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
+    # Permissions inherited from caller or workflow level
 
     steps:
       - uses: actions/checkout@v4
@@ -68,10 +70,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      # Install missing react-helmet-async dependency
-      - name: Install missing dependencies
-        run: pnpm add -D react-helmet-async
 
       - name: Install Vitest UI
         run: pnpm add -D @vitest/ui
