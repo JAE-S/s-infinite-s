@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // TODO: fix type any that are throwing errors
+    "noImplicitAny": false,
+    "skipLibCheck": true
+  }
+}

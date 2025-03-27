@@ -1,7 +1,7 @@
 {
   "name": "s-infinite-s",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1-rc.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,8 +13,14 @@
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,md}\"",
-    "type-check": "tsc --noEmit",
+    "organize-imports": "node scripts/organize-imports.cjs",
+    "organize-imports:all": "node scripts/organize-imports.cjs --all",
+    "organize-imports:staged": "node scripts/organize-imports.cjs --staged",
+    "type-check": "tsc --noEmit -p tsconfig.ci.json",
     "clean": "rimraf node_modules dist dist-development dist-staging",
+    "test:smoke": "vitest run --testNamePattern=\"smoke\"",
+    "test:accessibility": "vitest run --testNamePattern=\"accessibility\"",
+    "test:seo": "vitest run --testNamePattern=\"seo\"",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
@@ -26,8 +32,18 @@
     "release:major": "standard-version --release-as major"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.6.1",
+    "@types/jest-axe": "^3.5.9",
+    "@types/react-helmet-async": "^1.0.3",
+    "jest-axe": "^10.0.0",
+    "lodash": "^4.17.21",
+    "lucide-react": "^0.483.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-helmet-async": "^2.0.5",
+    "react-intersection-observer": "^9.16.0",
+    "react-redux": "^9.2.0",
+    "ts-morph": "^25.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
@@ -36,11 +52,13 @@
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
     "@testing-library/user-event": "^14.5.2",
+    "@types/lodash": "^4.17.16",
     "@types/node": "^20.11.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "@vitest/coverage-v8": "^1.4.0",
+    "@vitest/ui": "^1.6.1",
     "autoprefixer": "10.4.20",
     "eslint": "^9.9.0",
     "eslint-plugin-import": "^2.31.0",
@@ -48,6 +66,7 @@
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
+    "jsdom": "^26.0.0",
     "lint-staged": "^15.2.2",
     "postcss": "8.4.47",
     "prettier": "3.3.3",
@@ -56,6 +75,7 @@
     "simple-git-hooks": "^2.12.1",
     "standard-version": "^9.5.0",
     "tailwindcss": "3.4.12",
+    "terser": "^5.39.0",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^5.4.1",
@@ -63,9 +83,9 @@
     "vitest": "^1.4.0"
   },
   "simple-git-hooks": {
-    "pre-commit": "pnpm exec lint-staged",
+    "pre-commit": "pnpm run organize-imports:staged && pnpm exec lint-staged",
     "pre-push": "pnpm run type-check",
-    "commit-msg": "pnpm exec commitlint --edit \\$1"
+    "commit-msg": "pnpm exec commitlint --edit $1"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

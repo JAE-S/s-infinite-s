@@ -2,54 +2,71 @@ name: Production Build
 
 on:
   push:
-    branches: [production, main]  # Including main as it often deploys to production
+    branches: [production, main]
   pull_request:
     branches: [production]
+  workflow_dispatch:
+
+# Permissions at the workflow level
+permissions:
+  contents: read
+  pull-requests: write
+  actions: write
 
 jobs:
   build-production:
     name: Build Production
     runs-on: ubuntu-latest
     environment: production
+    needs: quality-and-tests
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+          run_install: false
 
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        version: 9
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
 
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-    - name: Build for production
-      run: pnpm run build
+      # No test steps - tests are handled by the shared workflow
 
-    - name: Get version from package.json
-      id: package_version
-      run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+      - name: Build for production
+        run: pnpm run build
 
-    - name: Set version tag format for production
-      run: echo "VERSION_TAG=v${VERSION}" >> $GITHUB_ENV
+      - name: Get version from package.json
+        id: package_version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
 
-    - name: Upload version info
-      run: |
-        echo "App Version: ${{ env.VERSION_TAG }}" > version.txt
-        echo "Build Date: $(date -u)" >> version.txt
-        echo "Commit: ${{ github.sha }}" >> version.txt
+      - name: Set version tag format for production
+        run: echo "VERSION_TAG=v${VERSION}" >> $GITHUB_ENV
 
-    - name: Include version file in artifacts
-      run: cp version.txt dist/
+      - name: Upload version info
+        run: |
+          echo "App Version: ${{ env.VERSION_TAG }}" > version.txt
+          echo "Build Date: $(date -u)" >> version.txt
+          echo "Commit: ${{ github.sha }}" >> version.txt
 
-    - name: Upload production build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: production-build
-        path: dist
-        retention-days: 5
+      - name: Include version file in artifacts
+        run: cp version.txt dist/
+
+      - name: Upload production build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-build
+          path: dist
+          retention-days: 5
+
+  # Reference to the shared Quality & Tests workflow
+  quality-and-tests:
+    name: Quality and Tests
+    uses: ./.github/workflows/quality-and-tests.yml

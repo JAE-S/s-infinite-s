@@ -1,0 +1,121 @@
+{
+  "numTotalTestSuites": 4,
+  "numPassedTestSuites": 4,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 11,
+  "numPassedTests": 11,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "startTime": 1742846909822,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["", "App Component"],
+          "fullName": " App Component renders without crashing",
+          "status": "passed",
+          "title": "renders without crashing",
+          "duration": 50,
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1742846913624,
+      "endTime": 1742846913674,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/jessiesholler/Dropbox/Job_hunting/interview_challenges/Student/s-infinite-s/src/layouts/__tests__/main_layout.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["", "ProductCard Component"],
+          "fullName": " ProductCard Component renders product information correctly",
+          "status": "passed",
+          "title": "renders product information correctly",
+          "duration": 51,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component"],
+          "fullName": " ProductCard Component applies correct classes based on layoutSize prop",
+          "status": "passed",
+          "title": "applies correct classes based on layoutSize prop",
+          "duration": 17,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component"],
+          "fullName": " ProductCard Component shows tooltip on hover and hides on mouse leave",
+          "status": "passed",
+          "title": "shows tooltip on hover and hides on mouse leave",
+          "duration": 25,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component"],
+          "fullName": " ProductCard Component shows tooltip on focus and hides on blur",
+          "status": "passed",
+          "title": "shows tooltip on focus and hides on blur",
+          "duration": 14,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component"],
+          "fullName": " ProductCard Component displays correct rating stars",
+          "status": "passed",
+          "title": "displays correct rating stars",
+          "duration": 6,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component"],
+          "fullName": " ProductCard Component handles image loading error correctly",
+          "status": "passed",
+          "title": "handles image loading error correctly",
+          "duration": 6,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component"],
+          "fullName": " ProductCard Component has no accessibility violations",
+          "status": "passed",
+          "title": "has no accessibility violations",
+          "duration": 175,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component"],
+          "fullName": " ProductCard Component buttons have accessible names",
+          "status": "passed",
+          "title": "buttons have accessible names",
+          "duration": 8,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component"],
+          "fullName": " ProductCard Component article has correct aria-labelledby attribute",
+          "status": "passed",
+          "title": "article has correct aria-labelledby attribute",
+          "duration": 6,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": ["", "ProductCard Component"],
+          "fullName": " ProductCard Component includes structured data for SEO",
+          "status": "passed",
+          "title": "includes structured data for SEO",
+          "duration": 6,
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1742846913263,
+      "endTime": 1742846913577,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/jessiesholler/Dropbox/Job_hunting/interview_challenges/Student/s-infinite-s/src/components/cards/__tests__/product_card.test.tsx"
+    }
+  ]
+}
